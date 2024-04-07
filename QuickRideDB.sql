@@ -49,6 +49,7 @@ CREATE TABLE Booking(
     userID INT,
     carID INT,
     timestamp DATETIME,
+    status ENUM('active', 'cancelled') DEFAULT 'active', 
     FOREIGN KEY(userID) REFERENCES User(userID),
     FOREIGN KEY(carID) REFERENCES Car(carID)
 );
