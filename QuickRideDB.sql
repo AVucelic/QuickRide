@@ -28,8 +28,8 @@ CREATE TABLE Admin(
     FOREIGN KEY(userID) REFERENCES User(userID)
 );
 
-GRANT ALL PRIVILEGES ON QuickRide.Admin TO 'root'@'localhost'; 
-REVOKE ALL PRIVILEGES ON QuickRide.Member FROM 'root'@'localhost';
+-- GRANT ALL PRIVILEGES ON QuickRide.Admin TO 'root'@'localhost'; 
+-- REVOKE ALL PRIVILEGES ON QuickRide.Member FROM 'root'@'localhost';
 
 
 DROP TABLE IF EXISTS Car;
