@@ -138,8 +138,31 @@ VALUES
     (1, 'all_permissions');
 INSERT INTO Car (manufacturer, model, power, year_of_production, mileage, isAvailable)
 VALUES
-    ('Toyota', 'Corolla', 120, 2018, 35000, TRUE),
-    ('Honda', 'Civic', 150, 2019, 25000, FALSE);
+   ('Toyota', 'Corolla', 120, 2018, 35000, TRUE),
+('Honda', 'Civic', 150, 2019, 25000, FALSE),
+('Ford', 'Focus', 110, 2017, 40000, TRUE),
+('Chevrolet', 'Cruze', 140, 2018, 30000, TRUE),
+('Volkswagen', 'Golf', 130, 2019, 20000, FALSE),
+('BMW', '3 Series', 180, 2020, 15000, TRUE),
+('Mercedes-Benz', 'C-Class', 170, 2019, 25000, FALSE),
+('Audi', 'A4', 160, 2018, 30000, TRUE),
+('Hyundai', 'Elantra', 120, 2017, 35000, TRUE),
+('Kia', 'Optima', 140, 2018, 30000, FALSE),
+('Nissan', 'Altima', 150, 2019, 20000, TRUE),
+('Subaru', 'Impreza', 140, 2017, 40000, TRUE),
+('Mazda', 'Mazda3', 130, 2018, 25000, FALSE),
+('Volvo', 'S60', 150, 2019, 20000, TRUE),
+('Lexus', 'IS', 170, 2020, 15000, TRUE),
+('Tesla', 'Model S', 400, 2021, 10000, TRUE),
+('Jeep', 'Wrangler', 260, 2020, 20000, TRUE),
+('Porsche', '911', 450, 2021, 8000, TRUE),
+('Land Rover', 'Range Rover', 300, 2020, 15000, FALSE),
+('Ferrari', '488 GTB', 670, 2021, 5000, TRUE),
+('Lamborghini', 'Huracan', 640, 2021, 6000, TRUE),
+('Aston Martin', 'Vantage', 503, 2020, 12000, TRUE),
+('Bentley', 'Continental GT', 626, 2021, 10000, FALSE),
+('Rolls-Royce', 'Ghost', 563, 2021, 9000, TRUE),
+('Maserati', 'GranTurismo', 454, 2020, 15000, TRUE);
 INSERT INTO Booking (userID, carID, timestamp)
 VALUES
     (1, 1, NOW()),

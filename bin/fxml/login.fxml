@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+   prefHeight="690.0" prefWidth="1061.0" xmlns="http://javafx.com/javafx/21"
+   xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+   <children>
+      <ImageView fitHeight="690.0" fitWidth="754.0" layoutY="1.0" opacity="0.85" pickOnBounds="true">
+         <image>
+            <Image url="@./images/background-img.jpg" />
+         </image>
+      </ImageView>
+      <Label layoutX="809.0" layoutY="94.0" text="QuickRide">
+         <font>
+            <Font name="Rockwell Condensed" size="64.0" />
+         </font>
+         <textFill>
+            <LinearGradient endX="0.8483412322274881" endY="0.4454976303317536"
+               startX="0.8009478672985783" startY="0.16113744075829384">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="0.13249999284744263" green="0.44292858242988586"
+                           blue="0.5299999713897705" />
+                     </color>
+                  </Stop>
+                  <Stop offset="0.006711409395973154">
+                     <color>
+                        <Color red="0.13249999284744263" green="0.44292858242988586"
+                           blue="0.5299999713897705" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="0.1315789520740509" green="0.1315789520740509"
+                           blue="0.1315789520740509" />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </textFill>
+      </Label>
+      <Label layoutX="762.0" layoutY="173.0"
+         text="Welcome! Please sign up or log into your account.">
+         <font>
+            <Font name="Rockwell Condensed" size="18.0" />
+         </font>
+      </Label>
+      <TextField fx:id="userTF" layoutX="796.0" layoutY="235.0" prefHeight="28.0" prefWidth="227.0"
+         promptText="janko3108" />
+      <TextField fx:id="passTF" layoutX="796.0" layoutY="298.0" prefHeight="28.0" prefWidth="227.0"
+         promptText="Password" />
+      <Label blendMode="SRC_ATOP" layoutX="56.0" layoutY="94.0" text="Discover" textFill="WHITE">
+         <font>
+            <Font name="Rockwell Condensed" size="96.0" />
+         </font>
+      </Label>
+      <Label blendMode="SRC_ATOP" layoutX="56.0" layoutY="194.0"
+         text="what driving a Porsche feels like" textFill="WHITE">
+         <font>
+            <Font name="Rockwell Condensed" size="44.0" />
+         </font>
+      </Label>
+      <Label layoutX="796.0" layoutY="216.0" text="Your username">
+         <font>
+            <Font name="Rockwell Condensed Bold" size="12.0" />
+         </font>
+      </Label>
+      <Label layoutX="796.0" layoutY="277.0" text="Password">
+         <font>
+            <Font name="Rockwell Condensed Bold" size="12.0" />
+         </font>
+      </Label>
+      <Button fx:id="btnLogIn" layoutX="796.0" layoutY="345.0" mnemonicParsing="false"
+         onAction="#authenticate" prefHeight="21.0" prefWidth="63.0" text="Log in">
+         <font>
+            <Font name="Rockwell Condensed" size="12.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnSignIn" layoutX="878.0" layoutY="345.0" mnemonicParsing="false"
+         onAction="#register" prefHeight="21.0" prefWidth="63.0" text="Sign up">
+         <font>
+            <Font name="Rockwell Condensed" size="12.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>
