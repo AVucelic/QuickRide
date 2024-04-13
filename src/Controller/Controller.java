@@ -8,6 +8,7 @@ import Models.Model;
 import Models.User;
 import Models.Users;
 import View.View;
+import View.AdminView;
 import View.SuccessView; // Import the SuccessView class
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,6 +24,7 @@ public class Controller implements EventHandler<ActionEvent> {
     private Stage primaryStage; // We need access to the primary stage for view switching
     private User currentUser;
     private SuccessView successView = new SuccessView();;
+    private AdminView adminView = new AdminView();
 
     public Controller(View view, Model carsModel, Model bookingModel, Users userModel, Stage primaryStage)
             throws DLExeption {
@@ -48,7 +50,11 @@ public class Controller implements EventHandler<ActionEvent> {
     // Method to switch to the success view
     public void switchToSuccessView(User user) {
         currentUser = user;
-        successView.start(primaryStage);
+        if (user.getUserRole().equals("Member")) {
+            successView.start(primaryStage);
+        } else {
+            adminView.start(primaryStage);
+        }
     }
 
 }

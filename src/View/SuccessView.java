@@ -66,7 +66,7 @@ public class SuccessView extends Application {
 
         carsModel = new Cars(); // Instantiate the carsModel here
 
-        primaryStage.setTitle("Success View Application");
+        primaryStage.setTitle("User view application");
 
         AnchorPane root = createContent();
         Scene scene = new Scene(root, 803, 599);
@@ -84,12 +84,12 @@ public class SuccessView extends Application {
         root.getChildren().add(topPane);
 
         Label searchLabel = new Label("Search by brand or model:");
-        searchLabel.setLayoutX(641);
-        searchLabel.setLayoutY(24);
+        searchLabel.setLayoutX(610);
+        searchLabel.setLayoutY(45);
         topPane.getChildren().add(searchLabel);
 
-        searchTF.setLayoutX(641);
-        searchTF.setLayoutY(41);
+        searchTF.setLayoutX(610);
+        searchTF.setLayoutY(70);
         searchTF.setPromptText("Toyota...");
         topPane.getChildren().add(searchTF);
 
@@ -279,7 +279,7 @@ public class SuccessView extends Application {
 
             // Perform type cast from ArrayList<Object> to ArrayList<Car>
             for (Object obj : carsDataObjects) {
-                if (obj instanceof Car) {
+                if (obj instanceof Car) { 
                     carsData.add((Car) obj);
                 }
             }
@@ -291,5 +291,4 @@ public class SuccessView extends Application {
             e.printStackTrace();
         }
     }
-
 }

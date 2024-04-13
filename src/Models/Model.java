@@ -15,4 +15,6 @@ public abstract class Model {
 
     public abstract boolean remove(int ID) throws DLExeption;
 
+    public abstract boolean setData(Object newData) throws DLExeption;
+
 }

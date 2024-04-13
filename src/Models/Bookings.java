@@ -62,6 +62,12 @@ public class Bookings extends Model {
         return db.executeQuery(query, new ArrayList<>());
     }
 
+    @Override
+    public boolean setData(Object newData) throws DLExeption {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setData'");
+    }
+
     // @Override
     // public ArrayList<Object> modify() throws DLExeption {
     // // TODO Auto-generated method stub

@@ -9,7 +9,8 @@ CREATE TABLE User(
     email VARCHAR(30) NOT NULL,
     password VARCHAR(30) NOT NULL,
     firstname VARCHAR(30) NOT NULL,
-    lastname VARCHAR(30) NOT NULL
+    lastname VARCHAR(30) NOT NULL,
+    userRole ENUM('Admin', 'Member') NOT NULL DEFAULT ('Member')
 );
 
 DROP TABLE IF EXISTS Member;
@@ -44,6 +45,7 @@ CREATE TABLE Car(
 );
 
 DROP TABLE IF EXISTS Booking;
+DROP TABLE IF EXISTS Booking;
 CREATE TABLE Booking(
     bookingID INT PRIMARY KEY AUTO_INCREMENT,
     userID INT,
@@ -51,9 +53,11 @@ CREATE TABLE Booking(
     timestamp DATETIME,
     status ENUM('active', 'cancelled') DEFAULT 'active', 
     FOREIGN KEY(userID) REFERENCES User(userID),
-    FOREIGN KEY(carID) REFERENCES Car(carID)
+    FOREIGN KEY(carID) REFERENCES Car(carID) ON DELETE CASCADE  -- Add ON DELETE CASCADE here
 );
 
+
+DROP TABLE IF EXISTS Payment;
 DROP TABLE IF EXISTS Payment;
 CREATE TABLE Payment(
     paymentID INT PRIMARY KEY AUTO_INCREMENT,
@@ -65,23 +69,26 @@ CREATE TABLE Payment(
     card_type VARCHAR(10),
     timestamp DATETIME,
     FOREIGN KEY(userID) REFERENCES User(userID), 
-    FOREIGN KEY(bookingID) REFERENCES Booking(bookingID)
+    FOREIGN KEY(bookingID) REFERENCES Booking(bookingID) ON DELETE CASCADE  -- Add ON DELETE CASCADE here
 );
 
+
+DROP TABLE IF EXISTS Pickup_location;
 DROP TABLE IF EXISTS Pickup_location;
 CREATE TABLE Pickup_location(
     bookingID INT PRIMARY KEY,  
-    FOREIGN KEY(bookingID) REFERENCES Booking(bookingID),
+    FOREIGN KEY(bookingID) REFERENCES Booking(bookingID) ON DELETE CASCADE,  -- Add ON DELETE CASCADE here
     address VARCHAR(30),
     city VARCHAR(30),
     postal_Code VARCHAR(10),
     time DATETIME
 );
 
+
 DROP TABLE IF EXISTS Dropoff_location;
 CREATE TABLE Dropoff_location(
     bookingID INT PRIMARY KEY, 
-    FOREIGN KEY(bookingID) REFERENCES Booking(bookingID),
+    FOREIGN KEY(bookingID) REFERENCES Booking(bookingID) ON DELETE CASCADE,
     address VARCHAR(30),
     city VARCHAR(30),
     postal_Code VARCHAR(10),
@@ -92,7 +99,7 @@ DROP TABLE IF EXISTS Insurance;
 CREATE TABLE Insurance(
     insuranceID INT PRIMARY KEY AUTO_INCREMENT,
     carID INT,
-    FOREIGN KEY(carID) REFERENCES Car(carID),
+    FOREIGN KEY(carID) REFERENCES Car(carID) ON DELETE CASCADE,
     insurance_model ENUM('basic', 'premium', 'standard')
 );
 
@@ -100,7 +107,7 @@ DROP TABLE IF EXISTS Maintenance;
 CREATE TABLE Maintenance(
     maintenanceID INT PRIMARY KEY AUTO_INCREMENT,
     carID INT,
-    FOREIGN KEY(carID) REFERENCES Car(carID),
+    FOREIGN KEY(carID) REFERENCES Car(carID) ON DELETE CASCADE,
     schedule_date DATE,
     description VARCHAR(100)
 );
@@ -109,7 +116,7 @@ DROP TABLE IF EXISTS Damage_report;
 CREATE TABLE Damage_report(
     reportID INT PRIMARY KEY AUTO_INCREMENT,
     carID INT,
-    FOREIGN KEY(carID) REFERENCES Car(carID),
+    FOREIGN KEY(carID) REFERENCES Car(carID) ON DELETE CASCADE,
     report_message VARCHAR(100),
     timestamp DATETIME
 );
@@ -119,16 +126,16 @@ CREATE TABLE Feedback(
     feedbackID INT PRIMARY KEY AUTO_INCREMENT,
     carID INT,
     userID INT,
-    FOREIGN KEY(carID) REFERENCES Car(carID),
-    FOREIGN KEY(userID) REFERENCES User(userID),
+    FOREIGN KEY(carID) REFERENCES Car(carID) ON DELETE CASCADE,
+    FOREIGN KEY(userID) REFERENCES User(userID) ON DELETE CASCADE,
     feedback_message VARCHAR(100),
     rating INT(1),
     timestamp DATETIME
 );
-INSERT INTO User (username, email, password, firstname, lastname) 
+INSERT INTO User (username, email, password, firstname, lastname, userRole) 
 VALUES 
-    ('john_doe', 'john@example.com', 'password123', 'John', 'Doe'),
-    ('jane_smith', 'jane@example.com', 'secret456', 'Jane', 'Smith');
+    ('john_doe', 'john@example.com', 'password123', 'John', 'Doe', 'Member'),
+    ('jane_smith', 'jane@example.com', 'secret456', 'Jane', 'Smith', 'Admin');
 INSERT INTO Member (userID, permissions)
 VALUES
     (1, 'can_view_bookings'),
