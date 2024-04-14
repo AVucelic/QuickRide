@@ -172,23 +172,6 @@ public class View extends Application {
             }
         });
 
-        // // Set action for the register button
-        // btnRegister.setOnAction(new EventHandler<ActionEvent>() {
-        // @Override
-        // public void handle(ActionEvent event) {
-        // // Add your registration logic here
-        // System.out.println("Register button clicked");
-        // }
-        // });
-
-        // // Set action for the login button
-        // btnLogin.setOnAction(new EventHandler<ActionEvent>() {
-        // @Override
-        // public void handle(ActionEvent event) {
-        // // Add your login logic here
-        // System.out.println("Login button clicked");
-        // }
-        // });
 
         primaryStage.setScene(loginScene);
         primaryStage.show();

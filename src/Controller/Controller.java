@@ -23,6 +23,8 @@ public class Controller implements EventHandler<ActionEvent> {
     private Users userModel;
     private Stage primaryStage; // We need access to the primary stage for view switching
     private User currentUser;
+    private UserView successView;
+    private AdminView adminView;
 
     public Controller(View view, Model carsModel, Model bookingModel, Users userModel, Stage primaryStage)
             throws DLExeption {
@@ -49,11 +51,11 @@ public class Controller implements EventHandler<ActionEvent> {
     public void switchToSuccessView(User user) {
         currentUser = user;
         if (user.getUserRole().equals("Member")) {
-            UserView successView = new UserView(); // Create UserView dynamically
+            successView = new UserView(); // Create UserView dynamically
             successView.setUserID(user.getUserID()); // Pass currentUser information
             successView.start(primaryStage);
         } else {
-            AdminView adminView = new AdminView(); // Create AdminView dynamically
+            adminView = new AdminView(); // Create AdminView dynamically
             adminView.start(primaryStage);
         }
     }

@@ -19,7 +19,7 @@ public class ApplicationRunner extends Application {
         view.start(primaryStage);
         primaryStage.getIcons().add(new Image("./images/icon.png"));
         Model cars = new Cars();
-        Model bookingModel = new Bookings(1);
+        Bookings bookingModel = new Bookings(1);
         Users userModel = new Users();
 
         Controller controller = new Controller(view, cars, bookingModel, userModel, view.getPrimaryStage());

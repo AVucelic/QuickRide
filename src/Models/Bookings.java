@@ -13,7 +13,7 @@ public class Bookings extends Model {
         bookings = new ArrayList<>();
         id = userid;
     }
-    
+
     public ArrayList<Object> getData() throws DLExeption {
         ArrayList<String> params = new ArrayList<>();
         params.add(id + "");
@@ -64,6 +64,22 @@ public class Bookings extends Model {
     public boolean setData(Object newData) throws DLExeption {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'setData'");
+    }
+
+    public void bookACar(int carID, int userID) throws DLExeption {
+        // Assuming db is accessible here and represents the database connectivity
+        Timestamp bookingTime = new Timestamp(System.currentTimeMillis());
+        String insertQuery = "INSERT INTO Booking (userID, carID, timestamp) VALUES (?, ?, ?)";
+        ArrayList<String> params = new ArrayList<>();
+        params.add(String.valueOf(userID)); // user ID parameter
+        params.add(String.valueOf(carID)); // car ID parameter
+        params.add(bookingTime.toString()); // booking timestamp parameter
+
+        if (db.executeUpdate(insertQuery, params)) {
+            System.out.println("Car booked successfully!");
+        } else {
+            System.out.println("Failed to book the car.");
+        }
     }
 
 }
