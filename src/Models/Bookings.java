@@ -1,5 +1,7 @@
 package Models;
 
+import java.sql.Date;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
@@ -8,6 +10,14 @@ import ConnectivityLayers.DLExeption;
 public class Bookings extends Model {
     ArrayList<Object> bookings;
     private int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public Bookings(int userid) {
         bookings = new ArrayList<>();
@@ -77,9 +87,24 @@ public class Bookings extends Model {
 
         if (db.executeUpdate(insertQuery, params)) {
             System.out.println("Car booked successfully!");
+            String updateQuery = "UPDATE Car SET isAvailable = 0 WHERE carID = ?";
+            ArrayList<String> params2 = new ArrayList<>();
+            params2.add(carID + "");
+            db.executeUpdate(updateQuery, params2);
         } else {
             System.out.println("Failed to book the car.");
         }
     }
+    // @Override
+    // public ArrayList<Object> modify() throws DLExeption {
+    // // TODO Auto-generated method stub
+    // throw new UnsupportedOperationException("Unimplemented method 'modify'");
+    // }
+
+    // @Override
+    // public ArrayList<Object> remove() throws DLExeption {
+    // // TODO Auto-generated method stub
+    // throw new UnsupportedOperationException("Unimplemented method 'remove'");
+    // }
 
 }

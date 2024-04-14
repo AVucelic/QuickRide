@@ -20,7 +20,7 @@ public class Users extends Model {
         ArrayList<ArrayList<String>> data = db.executeQuery(statement, params);
         for (int i = 1; i < data.size(); i++) {
             User user = new User(Integer.parseInt(data.get(i).get(0)), data.get(i).get(1), data.get(i).get(2),
-                    data.get(i).get(3), data.get(i).get(4), data.get(i).get(5), data.get(i).get(6));
+                    data.get(i).get(3), data.get(i).get(4), data.get(i).get(5));
             users.add(user);
         }
         return users;

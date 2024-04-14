@@ -6,7 +6,6 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -26,61 +25,13 @@ public class View extends Application {
     private TextField txtRegFirstName; // New field for first name
     private TextField txtRegLastName;
 
-    public TextField getTxtRegEmail() {
-        return txtRegEmail;
-    }
-
-    public TextField getTxtRegFirstName() {
-        return txtRegFirstName;
-    }
-
-    public TextField getTxtRegLastName() {
-        return txtRegLastName;
-    }
-
-    public TextField getTxtRegUsername() {
-        return txtRegUsername;
-    }
-
-    public PasswordField getTxtRegPassword() {
-        return txtRegPassword;
-    }
-
-    public PasswordField getTxtRegConfirmPassword() {
-        return txtRegConfirmPassword;
-    }
-
-    public void setPrimaryStage(Stage primaryStage) {
-        this.primaryStage = primaryStage;
-    }
-
-    public Stage getPrimaryStage() {
-        return primaryStage;
-    }
-
-    public TextField getTxtUsername() {
-        return txtUsername;
-    }
-
-    public PasswordField getTxtPassword() {
-        return txtPassword;
-    }
-
-    public void handleLogin(EventHandler<ActionEvent> e) {
-        btnLogin.setOnAction(e);
-    }
-
-    public void handleRegister(EventHandler<ActionEvent> e) {
-        btnRegister.setOnAction(e);
-    }
-
     @Override
     public void start(Stage stage) {
-
         primaryStage = stage;
-        primaryStage.setTitle("QuickRide Login");
+        primaryStage.setTitle("Login");
         primaryStage.setWidth(800);
         primaryStage.setHeight(800);
+
         // StackPane for the welcome label
         StackPane welcomePane = new StackPane();
         Label lblWelcome = new Label("Welcome to QUICK RIDE");
@@ -171,10 +122,56 @@ public class View extends Application {
                 primaryStage.setScene(loginScene);
             }
         });
-
-
         primaryStage.setScene(loginScene);
         primaryStage.show();
+    }
+
+    public TextField getTxtRegEmail() {
+        return txtRegEmail;
+    }
+
+    public TextField getTxtRegFirstName() {
+        return txtRegFirstName;
+    }
+
+    public TextField getTxtRegLastName() {
+        return txtRegLastName;
+    }
+
+    public TextField getTxtRegUsername() {
+        return txtRegUsername;
+    }
+
+    public PasswordField getTxtRegPassword() {
+        return txtRegPassword;
+    }
+
+    public PasswordField getTxtRegConfirmPassword() {
+        return txtRegConfirmPassword;
+    }
+
+    public void setPrimaryStage(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+    }
+
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
+    public TextField getTxtUsername() {
+        return txtUsername;
+    }
+
+    public PasswordField getTxtPassword() {
+        return txtPassword;
+    }
+
+    public void handleLogin(EventHandler<ActionEvent> e) {
+        btnLogin.setOnAction(e);
+    }
+
+    public void handleRegister(EventHandler<ActionEvent> e) {
+        btnRegister.setOnAction(e);
     }
 
 }
