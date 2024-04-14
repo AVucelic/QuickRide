@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -11,7 +12,10 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -19,16 +23,33 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import ConnectivityLayers.DLExeption;
+import Models.Booking;
+import Models.Bookings;
 import Models.Car;
 import Models.Cars;
+import Models.User;
 
-public class SuccessView extends Application {
+public class UserView extends Application {
 
     private ListView<String> listView = new ListView<>();
     private TextField searchTF = new TextField();
     private ComboBox<String> sortByComboBox = new ComboBox<>();
     private ComboBox<String> sortOrderComboBox = new ComboBox<>();
     private Cars carsModel;
+    private Bookings bookingModel;
+    private Stage primaryStage;
+    private Button bookingBtn;
+    private int userID;
+    private UserView successView;
+    private Scene scene;
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
 
     public ListView<String> getListView() {
         return listView;
@@ -57,19 +78,21 @@ public class SuccessView extends Application {
     private static final int ITEMS_PER_PAGE = 7;
     private int currentPage = 1;
 
-    public SuccessView() {
+    public UserView() {
 
     }
 
     @Override
     public void start(Stage primaryStage) {
-
+        this.primaryStage = primaryStage;
         carsModel = new Cars(); // Instantiate the carsModel here
+        System.out.println(getUserID());
+        bookingModel = new Bookings(getUserID());
 
         primaryStage.setTitle("User view application");
 
         AnchorPane root = createContent();
-        Scene scene = new Scene(root, 803, 599);
+        scene = new Scene(root, 803, 599);
         primaryStage.setScene(scene);
 
         primaryStage.show();
@@ -166,10 +189,17 @@ public class SuccessView extends Application {
         lastPageButton.setLayoutY(540);
         root.getChildren().add(lastPageButton);
 
+        bookingBtn = new Button("Bookings");
+        bookingBtn.setOnAction(event -> switchToBookingsScene());
+        bookingBtn.setLayoutX(401.5);
+        bookingBtn.setLayoutY(560);
+        root.getChildren().add(bookingBtn);
+
         return root;
     }
 
     public void populateListView(String searchQuery) {
+        successView = new UserView();
         try {
             ArrayList<Object> carsDataObjects = carsModel.getData();
             ObservableList<String> items = FXCollections.observableArrayList();
@@ -279,7 +309,7 @@ public class SuccessView extends Application {
 
             // Perform type cast from ArrayList<Object> to ArrayList<Car>
             for (Object obj : carsDataObjects) {
-                if (obj instanceof Car) { 
+                if (obj instanceof Car) {
                     carsData.add((Car) obj);
                 }
             }
@@ -291,4 +321,102 @@ public class SuccessView extends Application {
             e.printStackTrace();
         }
     }
+
+    public void switchToBookingsScene() {
+        VBox vbox = new VBox(10);
+        ListView<String> bookingsListView = new ListView<>();
+        Button backButton = new Button("Back");
+
+        backButton.setOnAction(event -> {
+            // Go back to the main user view scene
+            primaryStage.setScene(scene);
+        });
+
+        vbox.getChildren().addAll(bookingsListView, backButton);
+
+        try {
+            // Get bookings data and populate the bookingsListView
+            ArrayList<Object> bookingsDataObjects = bookingModel.getData(); // Assuming bookingsModel is defined
+            ObservableList<String> items = FXCollections.observableArrayList();
+            System.out.println(bookingsDataObjects);
+            for (Object obj : bookingsDataObjects) {
+                if (obj instanceof Booking) {
+                    Booking booking = (Booking) obj;
+                    items.add(booking.toString());
+                }
+            }
+
+            bookingsListView.setItems(items);
+        } catch (DLExeption e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText("Failed to load bookings data.");
+            alert.showAndWait();
+        }
+
+        Scene bookingsScene = new Scene(vbox, 400, 300);
+        primaryStage.setScene(bookingsScene);
+    }
+
+    public void setListView(ListView<String> listView) {
+        this.listView = listView;
+    }
+
+    public void setSearchTF(TextField searchTF) {
+        this.searchTF = searchTF;
+    }
+
+    public void setSortByComboBox(ComboBox<String> sortByComboBox) {
+        this.sortByComboBox = sortByComboBox;
+    }
+
+    public void setSortOrderComboBox(ComboBox<String> sortOrderComboBox) {
+        this.sortOrderComboBox = sortOrderComboBox;
+    }
+
+    public Cars getCarsModel() {
+        return carsModel;
+    }
+
+    public void setCarsModel(Cars carsModel) {
+        this.carsModel = carsModel;
+    }
+
+    public Bookings getBookingModel() {
+        return bookingModel;
+    }
+
+    public void setBookingModel(Bookings bookingModel) {
+        this.bookingModel = bookingModel;
+    }
+
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
+    public void setPrimaryStage(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+    }
+
+    public Button getBookingBtn() {
+        return bookingBtn;
+    }
+
+    public void setBookingBtn(Button bookingBtn) {
+        this.bookingBtn = bookingBtn;
+    }
+
+    public UserView getSuccessView() {
+        return successView;
+    }
+
+    public void setSuccessView(UserView successView) {
+        this.successView = successView;
+    }
+
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
+    }
+
 }

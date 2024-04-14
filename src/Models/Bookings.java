@@ -1,7 +1,5 @@
 package Models;
 
-import java.sql.Date;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
@@ -15,7 +13,7 @@ public class Bookings extends Model {
         bookings = new ArrayList<>();
         id = userid;
     }
-
+    
     public ArrayList<Object> getData() throws DLExeption {
         ArrayList<String> params = new ArrayList<>();
         params.add(id + "");
@@ -67,17 +65,5 @@ public class Bookings extends Model {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'setData'");
     }
-
-    // @Override
-    // public ArrayList<Object> modify() throws DLExeption {
-    // // TODO Auto-generated method stub
-    // throw new UnsupportedOperationException("Unimplemented method 'modify'");
-    // }
-
-    // @Override
-    // public ArrayList<Object> remove() throws DLExeption {
-    // // TODO Auto-generated method stub
-    // throw new UnsupportedOperationException("Unimplemented method 'remove'");
-    // }
 
 }

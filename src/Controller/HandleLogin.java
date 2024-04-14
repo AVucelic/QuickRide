@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import ConnectivityLayers.DLExeption;
 import Models.Model;
 import Models.User;
+import View.UserView;
 import View.View;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -16,6 +17,7 @@ public class HandleLogin implements EventHandler<ActionEvent> {
     private Model model;
     private User current;
     private Controller controller;
+    private UserView userView;
 
     public HandleLogin(Controller controller, View view, Model model) {
         this.view = view;
@@ -34,6 +36,8 @@ public class HandleLogin implements EventHandler<ActionEvent> {
                 User user = (User) object;
                 if (user.getUsername().equals(username) && user.getPassoword().equals(password)) {
                     current = user;
+                    userView = new UserView();
+                    userView.setUserID(current.getUserID());
                     controller.switchToSuccessView(current);
                     return;
                 }

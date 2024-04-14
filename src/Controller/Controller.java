@@ -9,7 +9,7 @@ import Models.User;
 import Models.Users;
 import View.View;
 import View.AdminView;
-import View.SuccessView; // Import the SuccessView class
+import View.UserView; // Import the SuccessView class
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -23,8 +23,6 @@ public class Controller implements EventHandler<ActionEvent> {
     private Users userModel;
     private Stage primaryStage; // We need access to the primary stage for view switching
     private User currentUser;
-    private SuccessView successView = new SuccessView();;
-    private AdminView adminView = new AdminView();
 
     public Controller(View view, Model carsModel, Model bookingModel, Users userModel, Stage primaryStage)
             throws DLExeption {
@@ -51,8 +49,11 @@ public class Controller implements EventHandler<ActionEvent> {
     public void switchToSuccessView(User user) {
         currentUser = user;
         if (user.getUserRole().equals("Member")) {
+            UserView successView = new UserView(); // Create UserView dynamically
+            successView.setUserID(user.getUserID()); // Pass currentUser information
             successView.start(primaryStage);
         } else {
+            AdminView adminView = new AdminView(); // Create AdminView dynamically
             adminView.start(primaryStage);
         }
     }

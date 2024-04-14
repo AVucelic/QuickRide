@@ -21,8 +21,6 @@ public class AdminView extends Application {
     private TableView<Car> tableView = new TableView<>();
     private Cars carsModel = new Cars();
 
-    
-
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Admin View");

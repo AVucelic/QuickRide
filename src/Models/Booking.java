@@ -47,4 +47,12 @@ public class Booking {
         this.carID = carID;
         this.userID = userID;
     }
+
+    @Override
+    public String toString() {
+        return "Booking ID: " + bookingID +
+                ", Car ID: " + carID +
+                ", User ID: " + userID +
+                ", Time Booked: " + timeBooked;
+    }
 }
