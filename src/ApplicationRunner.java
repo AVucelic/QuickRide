@@ -5,6 +5,7 @@ import Models.Model;
 import Models.Users;
 import View.View;
 import javafx.application.Application;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public class ApplicationRunner extends Application {
@@ -16,6 +17,7 @@ public class ApplicationRunner extends Application {
     public void start(Stage primaryStage) throws Exception {
         View view = new View();
         view.start(primaryStage);
+        primaryStage.getIcons().add(new Image("./images/icon.png"));
         Model cars = new Cars();
         Model bookingModel = new Bookings(1);
         Users userModel = new Users();

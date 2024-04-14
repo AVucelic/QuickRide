@@ -89,7 +89,7 @@ public class UserView extends Application {
         System.out.println(getUserID());
         bookingModel = new Bookings(getUserID());
 
-        primaryStage.setTitle("User view application");
+        primaryStage.setTitle("QuickRide");
 
         AnchorPane root = createContent();
         scene = new Scene(root, 803, 599);

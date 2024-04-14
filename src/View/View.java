@@ -6,6 +6,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -75,11 +76,11 @@ public class View extends Application {
 
     @Override
     public void start(Stage stage) {
+
         primaryStage = stage;
-        primaryStage.setTitle("Login");
+        primaryStage.setTitle("QuickRide Login");
         primaryStage.setWidth(800);
         primaryStage.setHeight(800);
-
         // StackPane for the welcome label
         StackPane welcomePane = new StackPane();
         Label lblWelcome = new Label("Welcome to QUICK RIDE");
