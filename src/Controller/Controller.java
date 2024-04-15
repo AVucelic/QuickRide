@@ -30,6 +30,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -332,6 +333,11 @@ public class Controller implements EventHandler<ActionEvent> {
                         selectedCar.setStatus("0");
                         // change the text on the list view after car gets booked so it's not available
                         // for booking anymore.
+                        Alert alert = new Alert(AlertType.INFORMATION);
+                        alert.setTitle("Confirmation");
+                        alert.setHeaderText(null);
+                        alert.setContentText("Successfully booked.");
+                        alert.showAndWait();
                         this.populateListView(this.successView.getSearchTF().getText());
                     } catch (DLExeption e) {
                         System.out.println("Booking failed.");
