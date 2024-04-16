@@ -1,7 +1,5 @@
 package Models;
 
-import java.sql.Date;
-
 public class Car {
     private int carID;
     private String manufacturer;
@@ -10,9 +8,10 @@ public class Car {
     private int year_of_Production;
     private int mileage;
     private String status;
+    private double price;
 
     public Car(int carID, String manufacturer, String model, int power, int year_of_Production, int mileage,
-            String status) {
+            String status, double price) {
         this.carID = carID;
         this.manufacturer = manufacturer;
         this.model = model;
@@ -20,6 +19,7 @@ public class Car {
         this.year_of_Production = year_of_Production;
         this.mileage = mileage;
         this.status = status;
+        this.price = price;
     }
 
     public int getCarID() {
@@ -72,11 +72,10 @@ public class Car {
 
     public String isStatus() {
         if (this.status.equals("1")) {
-            this.status = "True";
+            return "True";
         } else {
-            this.status = "False";
+            return "False";
         }
-        return this.status;
     }
 
     public String getStatus() {
@@ -89,11 +88,17 @@ public class Car {
 
     @Override
     public String toString() {
-        return "Brand: " + manufacturer + ", Model: " + model +
-                ", Power: " + power + "hp" +
-                ", Year of Production: " + year_of_Production +
-                ", Mileage: " + mileage + " km" +
-                ", Availability: " + isStatus();
+        return String.format(
+                "Brand: %s, Model: %s, Power: %dhp, Year of Production: %d, Mileage: %d km, Availability: %s, Price per day: %.2f",
+                manufacturer, model, power, year_of_Production, mileage, isStatus(), price);
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
 }

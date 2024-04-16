@@ -41,7 +41,8 @@ CREATE TABLE Car(
     power INT,
     year_of_production INT(4),
     mileage INT,
-    isAvailable BOOLEAN
+    isAvailable BOOLEAN,
+    price DOUBLE(6,2)
 );
 
 DROP TABLE IF EXISTS Booking;
@@ -143,33 +144,34 @@ VALUES
 INSERT INTO Admin (userID, permissions)
 VALUES
     (1, 'all_permissions');
-INSERT INTO Car (manufacturer, model, power, year_of_production, mileage, isAvailable)
+INSERT INTO Car (manufacturer, model, power, year_of_production, mileage, isAvailable, price)
 VALUES
-   ('Toyota', 'Corolla', 120, 2018, 35000, TRUE),
-('Honda', 'Civic', 150, 2019, 25000, FALSE),
-('Ford', 'Focus', 110, 2017, 40000, TRUE),
-('Chevrolet', 'Cruze', 140, 2018, 30000, TRUE),
-('Volkswagen', 'Golf', 130, 2019, 20000, FALSE),
-('BMW', '3 Series', 180, 2020, 15000, TRUE),
-('Mercedes-Benz', 'C-Class', 170, 2019, 25000, FALSE),
-('Audi', 'A4', 160, 2018, 30000, TRUE),
-('Hyundai', 'Elantra', 120, 2017, 35000, TRUE),
-('Kia', 'Optima', 140, 2018, 30000, FALSE),
-('Nissan', 'Altima', 150, 2019, 20000, TRUE),
-('Subaru', 'Impreza', 140, 2017, 40000, TRUE),
-('Mazda', 'Mazda3', 130, 2018, 25000, FALSE),
-('Volvo', 'S60', 150, 2019, 20000, TRUE),
-('Lexus', 'IS', 170, 2020, 15000, TRUE),
-('Tesla', 'Model S', 400, 2021, 10000, TRUE),
-('Jeep', 'Wrangler', 260, 2020, 20000, TRUE),
-('Porsche', '911', 450, 2021, 8000, TRUE),
-('Land Rover', 'Range Rover', 300, 2020, 15000, FALSE),
-('Ferrari', '488 GTB', 670, 2021, 5000, TRUE),
-('Lamborghini', 'Huracan', 640, 2021, 6000, TRUE),
-('Aston Martin', 'Vantage', 503, 2020, 12000, TRUE),
-('Bentley', 'Continental GT', 626, 2021, 10000, FALSE),
-('Rolls-Royce', 'Ghost', 563, 2021, 9000, TRUE),
-('Maserati', 'GranTurismo', 454, 2020, 15000, TRUE);
+   ('Toyota', 'Corolla', 120, 2018, 35000, TRUE, 50.00),
+   ('Honda', 'Civic', 150, 2019, 25000, FALSE, 60.00),
+   ('Ford', 'Focus', 110, 2017, 40000, TRUE, 45.00),
+   ('Chevrolet', 'Cruze', 140, 2018, 30000, TRUE, 55.00),
+   ('Volkswagen', 'Golf', 130, 2019, 20000, FALSE, 65.00),
+   ('BMW', '3 Series', 180, 2020, 15000, TRUE, 120.00),
+   ('Mercedes-Benz', 'C-Class', 170, 2019, 25000, FALSE, 110.00),
+   ('Audi', 'A4', 160, 2018, 30000, TRUE, 100.00),
+   ('Hyundai', 'Elantra', 120, 2017, 35000, TRUE, 50.00),
+   ('Kia', 'Optima', 140, 2018, 30000, FALSE, 55.00),
+   ('Nissan', 'Altima', 150, 2019, 20000, TRUE, 65.00),
+   ('Subaru', 'Impreza', 140, 2017, 40000, TRUE, 60.00),
+   ('Mazda', 'Mazda3', 130, 2018, 25000, FALSE, 70.00),
+   ('Volvo', 'S60', 150, 2019, 20000, TRUE, 90.00),
+   ('Lexus', 'IS', 170, 2020, 15000, TRUE, 110.00),
+   ('Tesla', 'Model S', 400, 2021, 10000, TRUE, 250.00),
+   ('Jeep', 'Wrangler', 260, 2020, 20000, TRUE, 150.00),
+   ('Porsche', '911', 450, 2021, 8000, TRUE, 400.00),
+   ('Land Rover', 'Range Rover', 300, 2020, 15000, FALSE, 350.00),
+   ('Ferrari', '488 GTB', 670, 2021, 5000, TRUE, 800.00),
+   ('Lamborghini', 'Huracan', 640, 2021, 6000, TRUE, 900.00),
+   ('Aston Martin', 'Vantage', 503, 2020, 12000, TRUE, 700.00),
+   ('Bentley', 'Continental GT', 626, 2021, 10000, FALSE, 1000.00),
+   ('Rolls-Royce', 'Ghost', 563, 2021, 9000, TRUE, 1200.00),
+   ('Maserati', 'GranTurismo', 454, 2020, 15000, TRUE, 600.00);
+
 INSERT INTO Booking (userID, carID, timestamp)
 VALUES
     (1, 1, NOW()),
