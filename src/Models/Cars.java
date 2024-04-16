@@ -56,6 +56,7 @@ public class Cars extends Model {
             params.add(String.valueOf(newCar.getYear_of_Production()));
             params.add(String.valueOf(newCar.getMileage()));
             params.add(newCar.getStatus());
+            params.add(String.valueOf(newCar.getPrice()));
 
             // Execute the insert statement
             boolean success = db.executeUpdate(statement, params);
@@ -81,6 +82,18 @@ public class Cars extends Model {
     public boolean modify(int bookingID, int newCarID, Timestamp newBookingTime) throws DLExeption {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'modify'");
+    }
+
+    public Car getCarByID(int carID) throws DLExeption {
+        for (Object obj : cars) {
+            if (obj instanceof Car) {
+                Car car = (Car) obj;
+                if (car.getCarID() == carID) {
+                    return car;
+                }
+            }
+        }
+        return null; // Return null if the car is not found
     }
 
 }

@@ -96,4 +96,16 @@ public class Bookings extends Model {
         }
     }
 
+    public Booking getBookingByID(int bookingID) throws DLExeption {
+        for (Object obj : bookings) {
+            if (obj instanceof Booking) {
+                Booking booking = (Booking) obj;
+                if (booking.getBookingID() == bookingID) {
+                    return booking;
+                }
+            }
+        }
+        return null; // Return null if the booking is not found
+    }
+
 }

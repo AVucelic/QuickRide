@@ -265,17 +265,29 @@ public class Controller implements EventHandler<ActionEvent> {
         }
     }
 
+    ListView<String> bookingsListView;
+
+    public ListView<String> getBookingsListView() {
+        return bookingsListView;
+    }
+
+    public void setBookingsListView(ListView<String> bookingsListView) {
+        this.bookingsListView = bookingsListView;
+    }
+
     public void switchToBookingsScene() {
         VBox vbox = new VBox(10);
-        ListView<String> bookingsListView = new ListView<>();
+        bookingsListView = new ListView<>();
         Button backButton = new Button("Back");
-
+        Button removeBooking = new Button("Cancel booking");
         backButton.setOnAction(event -> {
             // Go back to the main user view scene
             primaryStage.setScene(this.successView.getScene());
         });
 
-        vbox.getChildren().addAll(bookingsListView, backButton);
+        removeBooking.setOnAction(event -> removeBooking());
+
+        vbox.getChildren().addAll(bookingsListView, backButton, removeBooking);
 
         try {
             // Get bookings data and populate the bookingsListView
@@ -609,5 +621,59 @@ public class Controller implements EventHandler<ActionEvent> {
         } else {
             // Show an error message or alert dialog if no car is selected
         }
+    }
+
+    public void removeBooking() {
+        String selectedBookingString = this.bookingsListView.getSelectionModel().getSelectedItem();
+        if (selectedBookingString != null) {
+            try {
+                // Extract the booking ID from the selected booking
+                int bookingID = extractBookingID(selectedBookingString);
+                System.out.println(bookingID);
+                // Remove the booking from the bookings model
+                bookingsModel.remove(bookingID);
+
+                // Get the car associated with the removed booking
+                Car car = getCarByBookingID(bookingID);
+                System.out.println(car);
+                // Set the availability of the corresponding car to true
+                if (car != null) {
+                    car.setStatus("1");
+                    // Update the car status in the database
+                    carsModel.modifyCar(car.getCarID(), car.getMileage(), car.getStatus());
+                }
+
+                // Update the list view to reflect the changes
+                populateListView(this.successView.getSearchTF().getText());
+            } catch (DLExeption e) {
+                e.printStackTrace();
+            }
+        } else {
+            // Show an error message or alert dialog if no booking is selected
+        }
+    }
+
+    private int extractBookingID(String bookingString) {
+        // Split the string by ":"
+        String[] parts = bookingString.split(":");
+        String[] bookID = parts[1].split(",");
+        // Extract and parse the second part (index 1) as an integer
+        return Integer.parseInt(bookID[0].trim());
+    }
+
+    private Car getCarByBookingID(int bookingID) {
+        try {
+            // Get the booking object associated with the booking ID
+            Booking booking = bookingsModel.getBookingByID(bookingID);
+            if (booking != null) {
+                // Get the car ID from the booking object
+                int carID = booking.getCarID();
+                // Get the car object from the car ID
+                return carsModel.getCarByID(carID);
+            }
+        } catch (DLExeption e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
