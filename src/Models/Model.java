@@ -8,7 +8,7 @@ import ConnectivityLayers.DLExeption;
 import ConnectivityLayers.MySQLDatabase;
 
 public abstract class Model {
-    protected MySQLDatabase db = new MySQLDatabase("root", "ritcroatia");
+    protected MySQLDatabase db = new MySQLDatabase("root", "jupi1231");
 
     public abstract ArrayList<Object> getData() throws DLExeption;
 

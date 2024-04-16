@@ -20,7 +20,7 @@ public class Users extends Model {
         ArrayList<ArrayList<String>> data = db.executeQuery(statement, params);
         for (int i = 1; i < data.size(); i++) {
             User user = new User(Integer.parseInt(data.get(i).get(0)), data.get(i).get(1), data.get(i).get(2),
-                    data.get(i).get(3), data.get(i).get(4), data.get(i).get(5));
+                    data.get(i).get(3), data.get(i).get(4), data.get(i).get(5), data.get(i).get(6));
             users.add(user);
         }
         return users;
@@ -69,8 +69,16 @@ public class Users extends Model {
 
     @Override
     public boolean setData(Object newData) throws DLExeption {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setData'");
+        User user = (User) newData;
+        ArrayList<String> params = new ArrayList<>();
+        params.add(user.getUsername());
+        params.add(user.getEmail());
+        params.add(user.getPassoword());
+        params.add(user.getFirstName());
+        params.add(user.getLastName());
+        db.executeUpdate("INSERT INTO User (username, email, password, firstname, lastname) VALUES (?, ?, ?, ?, ?)",
+                params);
+        return true;
     }
 
 }

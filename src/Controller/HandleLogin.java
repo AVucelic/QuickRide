@@ -52,9 +52,9 @@ public class HandleLogin implements EventHandler<ActionEvent> {
     }
 
     public void switchViews(User user) {
-        if (user.getUserID() == 1) {
+        if (user.getRole().equals("Member")) {
             controller.switchToSuccessView(user);
-        } else if (user.getUserID() == 2) {
+        } else if (user.getRole().equals("Admin")) {
             controller.switchToAdminView(user);
         }
     }
