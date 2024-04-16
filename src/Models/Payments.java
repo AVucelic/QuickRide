@@ -31,13 +31,15 @@ public class Payments extends Model {
     @Override
     public boolean setData(Object newData) throws DLExeption {
         Payment payment = (Payment) newData;
-        String statement = "INSERT INTO Payment (bookingID,  amount, method, card_details,card_type ) VALUES (?, ?, ?, ?, ?)";
+        String statement = "INSERT INTO Payment (bookingID,  amount, method, card_details,card_type, timestamp ) VALUES (?, ?, ?, ?, ?, ?)";
         ArrayList<String> arr = new ArrayList<>();
         arr.add(payment.getBookingId() + "");
         arr.add(payment.getAmount() + "");
         arr.add(payment.getMethod());
         arr.add(payment.getCardDetails() + "");
         arr.add(payment.getCardType());
+        arr.add(payment.getTimestamp()+"");
+        db.executeUpdate(statement,arr);
 
         return true;
 

@@ -10,17 +10,17 @@ public class Payment {
     private String method;
     private int cardDetails;
     private String cardType;
-    private java.sql.Timestamp timestamp;
+    private Timestamp timestamp;
 
     public Payment(int paymentId, int bookingId, double amount, String method, int cardDetails, String cardType,
-            java.sql.Timestamp timestamp2) {
+            java.sql.Timestamp timestamp) {
         this.paymentId = paymentId;
         this.bookingId = bookingId;
         this.amount = amount;
         this.method = method;
         this.cardDetails = cardDetails;
         this.cardType = cardType;
-        this.timestamp = timestamp2;
+        this.timestamp = timestamp;
     }
 
     public int getPaymentId() {
