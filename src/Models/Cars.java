@@ -21,7 +21,7 @@ public class Cars extends Model {
         for (int i = 1; i < data.size(); i++) {
             Car car = new Car(Integer.parseInt(data.get(i).get(0)), data.get(i).get(1), data.get(i).get(2),
                     Integer.parseInt(data.get(i).get(3)), Integer.parseInt(data.get(i).get(4)),
-                    Integer.parseInt(data.get(i).get(5)), data.get(i).get(6));
+                    Integer.parseInt(data.get(i).get(5)), data.get(i).get(6), Double.parseDouble(data.get(i).get(7)));
             this.cars.add(car);
         }
         return this.cars;
@@ -48,7 +48,7 @@ public class Cars extends Model {
     public boolean setData(Object newData) throws DLExeption {
         if (newData instanceof Car) {
             Car newCar = (Car) newData;
-            String statement = "INSERT INTO Car (manufacturer, model, power, year_of_Production, mileage, isAvailable) VALUES (?, ?, ?, ?, ?, ?)";
+            String statement = "INSERT INTO Car (manufacturer, model, power, year_of_Production, mileage, isAvailable, price) VALUES (?, ?, ?, ?, ?, ?, ?)";
             ArrayList<String> params = new ArrayList<>();
             params.add(newCar.getManufacturer());
             params.add(newCar.getModel());

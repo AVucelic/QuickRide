@@ -34,6 +34,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class Controller implements EventHandler<ActionEvent> {
@@ -112,6 +113,7 @@ public class Controller implements EventHandler<ActionEvent> {
         this.adminView.getYearCol().setCellValueFactory(new PropertyValueFactory<>("year_of_Production"));
         this.adminView.getMileageCol().setCellValueFactory(new PropertyValueFactory<>("mileage"));
         this.adminView.getStatusCol().setCellValueFactory(new PropertyValueFactory<>("status"));
+        this.adminView.getPriceCol().setCellValueFactory(new PropertyValueFactory<>("price"));
         this.adminView.getAddButton().setOnAction(event -> this.addCar());
         this.adminView.getDeleteButton().setOnAction(event -> this.deleteCar());
         this.adminView.getModifyButton().setOnAction(event -> this.modifyCar());
@@ -141,7 +143,7 @@ public class Controller implements EventHandler<ActionEvent> {
             List<Car> filteredCars = carsData.stream()
                     .filter(car -> car.getManufacturer().toLowerCase().contains(searchQuery.toLowerCase())
                             || car.getModel().toLowerCase().contains(searchQuery.toLowerCase()))
-                    .filter(car -> car.getStatus().equals("1"))
+                    .filter(car -> car.getStatus().equals("1")) // This filters only available cars
                     .sorted(getComparator(this.successView.getSortByComboBox().getValue(),
                             this.successView.getSortOrderComboBox().getValue()))
                     .collect(Collectors.toList());
@@ -193,6 +195,9 @@ public class Controller implements EventHandler<ActionEvent> {
                 break;
             case "Status":
                 comparator = Comparator.comparing(Car::getStatus);
+                break;
+            case "Price":
+                comparator = Comparator.comparing(Car::getPrice);
                 break;
             default:
                 comparator = Comparator.comparing(Car::getManufacturer); // Default to
@@ -455,6 +460,9 @@ public class Controller implements EventHandler<ActionEvent> {
         Label statusLabel = new Label("Status:");
         TextField statusField = new TextField();
 
+        Label priceLabel = new Label("Price per day:");
+        TextField priceField = new TextField();
+
         // Create a button to confirm adding the new car
         Button addButton = new Button("Add");
         addButton.setOnAction(event -> {
@@ -465,9 +473,10 @@ public class Controller implements EventHandler<ActionEvent> {
             int year = Integer.parseInt(yearField.getText());
             int mileage = Integer.parseInt(mileageField.getText());
             String status = statusField.getText();
+            double price = Double.parseDouble(priceField.getText());
 
             // Create a new Car object with the input values
-            Car newCar = new Car(0, manufacturer, model, power, year, mileage, status);
+            Car newCar = new Car(0, manufacturer, model, power, year, mileage, status, price);
 
             try {
                 // Add the new car to the database
@@ -491,7 +500,8 @@ public class Controller implements EventHandler<ActionEvent> {
         gridPane.addRow(3, yearLabel, yearField);
         gridPane.addRow(4, mileageLabel, mileageField);
         gridPane.addRow(5, statusLabel, statusField);
-        gridPane.addRow(6, addButton);
+        gridPane.addRow(6, priceLabel, priceField);
+        gridPane.addRow(7, addButton);
 
         // Create the scene and set it to the pop-up window
         Scene scene = new Scene(gridPane, 300, 250);
@@ -541,6 +551,9 @@ public class Controller implements EventHandler<ActionEvent> {
             Label statusLabel = new Label("Status:");
             TextField statusField = new TextField(selectedCar.getStatus());
             statusField.setEditable(true);
+            Label priceLabel = new Label("Price per day: ");
+            TextField priceField = new TextField(String.valueOf(selectedCar.getPrice()));
+            priceField.setEditable(false);
             // Create a button to confirm the modifications
             Button modifyButton = new Button("Modify");
             modifyButton.setOnAction(event -> {
@@ -551,6 +564,7 @@ public class Controller implements EventHandler<ActionEvent> {
                 int year = Integer.parseInt(yearField.getText());
                 int mileage = Integer.parseInt(mileageField.getText());
                 String status = statusField.getText();
+                double price = Double.parseDouble(priceField.getText());
 
                 // Update the selected car object with the new values
                 selectedCar.setManufacturer(manufacturer);
@@ -559,6 +573,7 @@ public class Controller implements EventHandler<ActionEvent> {
                 selectedCar.setYear_of_Production(year);
                 selectedCar.setMileage(mileage);
                 selectedCar.setStatus(status);
+                selectedCar.setPrice(price);
 
                 try {
                     // Update the car details in the database
@@ -583,7 +598,8 @@ public class Controller implements EventHandler<ActionEvent> {
             gridPane.addRow(3, yearLabel, yearField);
             gridPane.addRow(4, mileageLabel, mileageField);
             gridPane.addRow(5, statusLabel, statusField);
-            gridPane.addRow(6, modifyButton);
+            gridPane.addRow(6, priceLabel, priceField);
+            gridPane.addRow(7, modifyButton);
 
             // Create the scene and set it to the pop-up window
             Scene scene = new Scene(gridPane, 300, 250);

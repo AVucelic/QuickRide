@@ -13,14 +13,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-
-
 public class SuccessView extends Application {
 
     private ListView<String> listView = new ListView<>();
     private TextField searchTF = new TextField();
     private ComboBox<String> sortByComboBox = new ComboBox<>(FXCollections.observableArrayList(
-            "Manufacturer", "Model", "Power", "Year of Production", "Mileage", "Status"));
+            "Manufacturer", "Model", "Power", "Year of Production", "Mileage", "Status", "Price"));
     private ComboBox<String> sortOrderComboBox = new ComboBox<>(FXCollections.observableArrayList(
             "Ascending", "Descending"));
     private CheckBox showAllCarsCheckBox = new CheckBox("Show all cars");

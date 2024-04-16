@@ -32,6 +32,7 @@ public class AdminView extends Application {
     TableColumn<Car, Integer> yearCol = new TableColumn<>("Year of Production");
     TableColumn<Car, Integer> mileageCol = new TableColumn<>("Mileage");
     TableColumn<Car, String> statusCol = new TableColumn<>("Status");
+    TableColumn<Car, Double> priceCol = new TableColumn<>("Price");
 
     @Override
     public void start(Stage primaryStage) {
@@ -40,7 +41,8 @@ public class AdminView extends Application {
         BorderPane borderPane = new BorderPane();
         Scene scene = new Scene(borderPane, 800, 600);
 
-        tableView.getColumns().addAll(carIDCol, manufacturerCol, modelCol, powerCol, yearCol, mileageCol, statusCol);
+        tableView.getColumns().addAll(carIDCol, manufacturerCol, modelCol, powerCol, yearCol, mileageCol, statusCol,
+                priceCol);
 
         GridPane buttonPane = new GridPane();
         buttonPane.setHgap(10);
@@ -53,6 +55,14 @@ public class AdminView extends Application {
 
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    public TableColumn<Car, Double> getPriceCol() {
+        return priceCol;
+    }
+
+    public void setPriceCol(TableColumn<Car, Double> priceCol) {
+        this.priceCol = priceCol;
     }
 
     public Button getModifyButton() {
