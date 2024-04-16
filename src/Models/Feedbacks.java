@@ -37,7 +37,7 @@ public class Feedbacks extends Model {
     @Override
     public boolean setData(Object newData) throws DLExeption {
         Feedback feedback = (Feedback) newData;
-        String statement = "INSERT INTO Feedback (userID ,  feedback_message, rating , timestamp) VALUES (?, ?, ?, ?, ?)";
+        String statement = "INSERT INTO Feedback (userID ,  feedback_message, rating , timestamp) VALUES (?, ?, ?, ?)";
         ArrayList<String> arr = new ArrayList<>();
         arr.add(feedback.getUserID() + "");
         arr.add(feedback.getFeedBack());

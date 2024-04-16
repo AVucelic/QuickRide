@@ -95,16 +95,5 @@ public class Bookings extends Model {
             System.out.println("Failed to book the car.");
         }
     }
-    // @Override
-    // public ArrayList<Object> modify() throws DLExeption {
-    // // TODO Auto-generated method stub
-    // throw new UnsupportedOperationException("Unimplemented method 'modify'");
-    // }
-
-    // @Override
-    // public ArrayList<Object> remove() throws DLExeption {
-    // // TODO Auto-generated method stub
-    // throw new UnsupportedOperationException("Unimplemented method 'remove'");
-    // }
 
 }
