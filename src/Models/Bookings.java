@@ -27,8 +27,9 @@ public class Bookings extends Model {
     public ArrayList<Object> getData() throws DLExeption {
         ArrayList<String> params = new ArrayList<>();
         params.add(id + "");
+        params.add("active");
         this.bookings = new ArrayList<>();
-        String statement = "Select * from Booking where userID = ?";
+        String statement = "Select * from Booking where userID = ? and status = ?";
         ArrayList<ArrayList<String>> data = db.executeQuery(statement, params);
 
         for (int i = 1; i < data.size(); i++) {

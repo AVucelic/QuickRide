@@ -2,6 +2,7 @@ package Controller;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -274,12 +275,37 @@ public class Controller implements EventHandler<ActionEvent> {
 
         try {
             // Get bookings data and populate the bookingsListView
-            ArrayList<Object> bookingsDataObjects = bookingsModel.getData(); // Assuming bookingsModel is defined
+            // ArrayList<Object> bookingsDataObjects = bookingsModel.getData(); // Assuming
             ObservableList<String> items = FXCollections.observableArrayList();
-            for (Object obj : bookingsDataObjects) {
-                if (obj instanceof Booking) {
-                    Booking booking = (Booking) obj;
-                    items.add(booking.toString());
+            // for (Object obj : bookingsDataObjects) {
+            // if (obj instanceof Booking) {
+            // Booking booking = (Booking) obj;
+            // items.add(booking.toString());
+            // }
+            // }
+
+            ArrayList<Object> bookings = bookingsModel.getData();
+            ArrayList<Object> cars = carsModel.getData();
+            LocalDate date = LocalDate.now();
+            for (Object object : bookings) {
+                Booking booking = (Booking) object;
+                LocalDate dateToCompare = booking.getTimeBooked().toInstant().atZone(ZoneId.systemDefault())
+                        .toLocalDate();
+                for (Object carObj : cars) {
+                    Car car = (Car) carObj;
+                    if (car.getCarID() == booking.getCarID()) {
+                        if (dateToCompare.isBefore(date)) {
+                            carsModel.modifyCar(car.getCarID(), car.getMileage(), "1");
+                            bookingsModel.remove(booking.getBookingID());
+                            System.out.println("Works!!");
+                        } else {
+                            System.out.println("DATE" + date.toString());
+                            System.out.println();
+                            System.out.println("DATE TO COMPARE: " + dateToCompare.toString());
+                            items.add(booking.toString());
+
+                        }
+                    }
                 }
             }
 
