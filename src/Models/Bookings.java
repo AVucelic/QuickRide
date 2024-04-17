@@ -64,9 +64,24 @@ public class Bookings extends Model {
     }
 
     /** just for testing */
-    public ArrayList<ArrayList<String>> getAllBookings() throws DLExeption {
+    public ArrayList<Object> getAllBookings() throws DLExeption {
         String query = "SELECT * FROM Booking";
-        return db.executeQuery(query, new ArrayList<>());
+        ArrayList<ArrayList<String>> data = db.executeQuery(query, new ArrayList<>());
+        ArrayList<Object> bookings = new ArrayList<>();
+
+        // Skip the first row (header row) containing column names
+        for (int i = 1; i < data.size(); i++) {
+            ArrayList<String> row = data.get(i);
+            int bookingID = Integer.parseInt(row.get(0));
+            int userID = Integer.parseInt(row.get(1));
+            int carID = Integer.parseInt(row.get(2));
+            Timestamp timestamp = Timestamp.valueOf(row.get(3));
+
+            Booking booking = new Booking(bookingID, userID, carID, timestamp);
+            bookings.add(booking);
+        }
+
+        return bookings;
     }
 
     @Override
