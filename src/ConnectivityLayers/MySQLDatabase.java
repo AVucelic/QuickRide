@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 
 public class MySQLDatabase {
@@ -14,6 +13,7 @@ public class MySQLDatabase {
     private String url;
     private String password;
     private String[] info = new String[4];
+    private boolean isInTransaction = false;
 
     public MySQLDatabase(String username, String password) {
         this.url = "jdbc:mysql://localhost:3306/QuickRide";
@@ -117,6 +117,59 @@ public class MySQLDatabase {
         info[3] = "Additional Error feedback: " + reason;
 
         return info;
+    }
+
+    // Start a transaction
+    public boolean startTrans() throws DLExeption {
+        try {
+            if (!isInTransaction && connection != null) {
+                connection.setAutoCommit(false);
+                isInTransaction = true;
+                System.out.println("Transaction started.");
+                return true;
+            } else {
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DLExeption(e, additionalDetails("Failed to start a transaction."));
+        }
+    }
+
+    // End a transaction (commit changes)
+    public boolean endTrans() throws DLExeption {
+        try {
+            if (isInTransaction && connection != null) {
+                connection.commit();
+                connection.setAutoCommit(true);
+                isInTransaction = false;
+                System.out.println("Transaction committed.");
+                return true;
+            } else {
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DLExeption(e, additionalDetails("Failed to end a transaction."));
+        }
+    }
+
+    // Rollback a transaction
+    public boolean rollbackTrans() throws DLExeption {
+        try {
+            if (isInTransaction && connection != null) {
+                connection.rollback();
+                connection.setAutoCommit(true);
+                isInTransaction = false;
+                System.out.println("Transaction rolled back.");
+                return true;
+            } else{
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DLExeption(e, additionalDetails("Failed to rollback a transaction."));
+        }
     }
 
 }

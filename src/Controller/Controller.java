@@ -1,14 +1,13 @@
 package Controller;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import ConnectivityLayers.DLExeption;
+import ConnectivityLayers.MySQLDatabase;
 import Models.Booking;
 import Models.Bookings;
 import Models.Car;
@@ -27,15 +26,17 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class Controller implements EventHandler<ActionEvent> {
@@ -341,52 +342,53 @@ public class Controller implements EventHandler<ActionEvent> {
 
     public void bookACar() {
         Car selectedCar = getSelectedCar();
-        if (getSelectedCar() != null) {
-            Stage popupStage = new Stage();
-            popupStage.setTitle("Book a car");
-
+        if (selectedCar != null) {
+            Stage bookingStage = new Stage();
+            bookingStage.setTitle("Book a Car");
+    
             // Create grid pane to organize UI elements
             GridPane gridPane = new GridPane();
             gridPane.setHgap(10);
             gridPane.setVgap(10);
-
+    
             // Labels
             Label carIDLabel = new Label("Car ID:");
             Label bookingTimeLabel = new Label("Booking Time:");
-
+    
             // Text fields
             TextField carIDTextField = new TextField(String.valueOf(selectedCar.getCarID()));
             carIDTextField.setEditable(false);
-
+    
             DatePicker bookingDatePicker = new DatePicker(); // DatePicker for selecting booking date
             // Set the prompt text for clarity
             bookingDatePicker.setPromptText("Select Booking Date");
-
+    
             // Button
             Button bookButton = new Button("Book");
             bookButton.setOnAction(event -> {
-                // Implement booking logic here
-                int carID = Integer.parseInt(carIDTextField.getText());
                 LocalDate bookingDate = bookingDatePicker.getValue();
                 if (bookingDate != null) {
-                    // Convert LocalDate to Timestamp
-                    Timestamp bookingTime = Timestamp.valueOf(bookingDate.atStartOfDay());
                     try {
+                        MySQLDatabase database = new MySQLDatabase("root", "Arianic!123");
+                        database.connect();
+                        database.startTrans(); // Start a new transaction
+    
+                        int carID = selectedCar.getCarID();
                         bookingsModel.bookACar(carID, bookingsModel.getId());
-                        selectedCar.setStatus("0");
-                        // change the text on the list view after car gets booked so it's not available
-                        // for booking anymore.
-                        Alert alert = new Alert(AlertType.INFORMATION);
-                        alert.setTitle("Confirmation");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Successfully booked.");
-                        alert.showAndWait();
-                        this.populateListView(this.successView.getSearchTF().getText());
+                        selectedCar.setStatus("0"); // Mark car as booked
+                        this.populateListView(this.successView.getSearchTF().getText()); // Refresh car list view
+    
+                        // Commit the transaction after successful booking
+                        // No transaction commit here; it will be committed after payment processing
+                        bookingStage.close(); // Close the booking popup stage
+    
+                        // Display payment popup after booking
+                        displayPaymentPopup(selectedCar, database); // Pass database connection for the same transaction
+    
                     } catch (DLExeption e) {
                         System.out.println("Booking failed.");
                         e.printStackTrace();
                     }
-                    popupStage.close();
                 } else {
                     // Show an alert if no date is selected
                     Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -396,20 +398,20 @@ public class Controller implements EventHandler<ActionEvent> {
                     alert.showAndWait();
                 }
             });
-
+    
             // Add UI elements to the grid pane
             gridPane.add(carIDLabel, 0, 0);
             gridPane.add(carIDTextField, 1, 0);
             gridPane.add(bookingTimeLabel, 0, 1);
             gridPane.add(bookingDatePicker, 1, 1);
             gridPane.add(bookButton, 0, 2);
-
+    
             // Create scene with the grid pane
             Scene scene = new Scene(gridPane, 300, 150);
-            popupStage.setScene(scene);
-
-            // Show the popup stage
-            popupStage.show();
+            bookingStage.setScene(scene);
+    
+            // Show the booking popup stage
+            bookingStage.show();
         } else {
             // Show an alert indicating that no car is selected
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -419,6 +421,79 @@ public class Controller implements EventHandler<ActionEvent> {
             alert.showAndWait();
         }
     }
+    
+    private void displayPaymentPopup(Car selectedCar, MySQLDatabase database) {
+        Stage paymentStage = new Stage();
+        paymentStage.initModality(Modality.APPLICATION_MODAL);
+        paymentStage.setTitle("Payment");
+    
+        // Payment method selection components
+        Label paymentMethodLabel = new Label("Select Payment Method:");
+        RadioButton cashRadioButton = new RadioButton("Cash");
+        RadioButton cardRadioButton = new RadioButton("Card");
+        ToggleGroup toggleGroup = new ToggleGroup();
+        cashRadioButton.setToggleGroup(toggleGroup);
+        cardRadioButton.setToggleGroup(toggleGroup);
+        cardRadioButton.setSelected(true); // Default to card payment
+    
+        // Card details input components
+        Label cardDetailsLabel = new Label("Card Details:");
+        TextField cardDetailsField = new TextField();
+        cardDetailsField.setPromptText("Enter 16-digit card number");
+    
+        Label cardTypeLabel = new Label("Card Type:");
+        ComboBox<String> cardTypeComboBox = new ComboBox<>();
+        cardTypeComboBox.getItems().addAll("Visa", "Mastercard", "American Express");
+    
+        // Pay button
+        Button payButton = new Button("Pay");
+        payButton.setOnAction(e -> {
+            if (toggleGroup.getSelectedToggle() == cashRadioButton) {
+                // Process cash payment within the existing transaction
+                processCashPayment(selectedCar, database);
+            } else if (toggleGroup.getSelectedToggle() == cardRadioButton) {
+                // Process card payment within the existing transaction
+                String cardNumber = cardDetailsField.getText();
+                String cardType = cardTypeComboBox.getValue();
+    
+                if (isValidCardNumber(cardNumber)) {
+                    processCardPayment(selectedCar, cardNumber, cardType, database);
+                } else {
+                    // If card number is invalid, show an error message
+                    Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                    errorAlert.setTitle("Invalid Card Number");
+                    errorAlert.setHeaderText(null);
+                    errorAlert.setContentText("Please enter a valid 16-digit card number.");
+                    errorAlert.showAndWait();
+                }
+            }
+    
+            // Close the payment pop-up after processing
+            paymentStage.close();
+    
+            // Refresh the car list view after payment processing
+            populateListView(successView.getSearchTF().getText());
+        });
+    
+        // Layout for payment pop-up
+        GridPane paymentLayout = new GridPane();
+        paymentLayout.setHgap(10);
+        paymentLayout.setVgap(10);
+        paymentLayout.addRow(0, paymentMethodLabel);
+        paymentLayout.addRow(1, cashRadioButton);
+        paymentLayout.addRow(2, cardRadioButton);
+        paymentLayout.addRow(3, cardDetailsLabel, cardDetailsField);
+        paymentLayout.addRow(4, cardTypeLabel, cardTypeComboBox);
+        paymentLayout.addRow(5, payButton);
+    
+        // Create scene and set it to the payment pop-up stage
+        Scene paymentScene = new Scene(paymentLayout, 300, 200);
+        paymentStage.setScene(paymentScene);
+    
+        // Show the payment pop-up
+        paymentStage.showAndWait();
+    }
+    
 
     private Car getSelectedCar() {
         String selectedItem = this.successView.getListView().getSelectionModel().getSelectedItem();
@@ -703,4 +778,61 @@ public class Controller implements EventHandler<ActionEvent> {
         }
         return null;
     }
+
+    // Method to validate card number (16 digits)
+    private boolean isValidCardNumber(String cardNumber) {
+        return cardNumber != null && cardNumber.matches("^\\d{16}$");
+    }
+
+    private void processCardPayment(Car selectedCar, String cardNumber, String cardType, MySQLDatabase database) {
+        try {
+            // Start a new transaction
+            database.startTrans();
+    
+            // Perform booking using the selected car and payment details
+            bookingsModel.bookACar(selectedCar.getCarID(), bookingsModel.getId());
+            selectedCar.setStatus("0"); // Mark car as booked
+            this.populateListView(this.successView.getSearchTF().getText()); // Refresh car list view
+    
+            // Commit the transaction after successful booking
+            database.endTrans();
+            database.close(); // Close database connection
+        } catch (DLExeption e) {
+            try {
+                // Rollback the transaction in case of any exception
+                database.rollbackTrans();
+                database.close(); // Close database connection
+            } catch (DLExeption rollbackException) {
+                rollbackException.printStackTrace();
+            }
+            e.printStackTrace();
+        }
+    }
+    
+
+    private void processCashPayment(Car selectedCar, MySQLDatabase database) {
+        try {
+            // Start a new transaction
+            database.startTrans();
+    
+            // Perform booking using the selected car (cash payment)
+            bookingsModel.bookACar(selectedCar.getCarID(), bookingsModel.getId());
+            selectedCar.setStatus("0"); // Mark car as booked
+            this.populateListView(this.successView.getSearchTF().getText()); // Refresh car list view
+    
+            // Commit the transaction after successful booking
+            database.endTrans();
+            database.close(); // Close database connection
+        } catch (DLExeption e) {
+            try {
+                // Rollback the transaction in case of any exception
+                database.rollbackTrans();
+                database.close(); // Close database connection
+            } catch (DLExeption rollbackException) {
+                rollbackException.printStackTrace();
+            }
+            e.printStackTrace();
+        }
+    }
+    
 }

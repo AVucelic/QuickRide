@@ -6,7 +6,6 @@ import ConnectivityLayers.DLExeption;
 import Models.Model;
 import Models.User;
 import View.View;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;

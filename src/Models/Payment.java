@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 
 public class Payment {
 
+    private int userID;
     private int paymentId;
     private int bookingId;
     private double amount;
@@ -12,9 +13,10 @@ public class Payment {
     private String cardType;
     private Timestamp timestamp;
 
-    public Payment(int paymentId, int bookingId, double amount, String method, int cardDetails, String cardType,
+    public Payment(int paymentId, int userID, int bookingId, double amount, String method, int cardDetails, String cardType,
             java.sql.Timestamp timestamp) {
         this.paymentId = paymentId;
+        this.userID = userID;
         this.bookingId = bookingId;
         this.amount = amount;
         this.method = method;
@@ -78,5 +80,14 @@ public class Payment {
     public void setTimestamp(Timestamp timestamp) {
         this.timestamp = timestamp;
     }
+
+    public int getUserID() {
+        return userID;
+    }
+
+    public void setUserID(int userID) {
+        this.userID = userID;
+    }
+
 
 }
