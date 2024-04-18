@@ -17,6 +17,13 @@ public class Feedback {
         this.time = time;
     }
 
+    public Feedback(int userID, String feedback_message, int rating, Timestamp time) {
+        this.userID = userID;
+        this.feedBack = feedback_message;
+        this.rating = rating;
+        this.time = time;
+    }
+
     public int getFeedBackID() {
         return feedBackID;
     }

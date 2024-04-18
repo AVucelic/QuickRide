@@ -15,6 +15,12 @@ public class Report {
         this.description = description;
     }
 
+    public Report(int carID, Timestamp date, String description) {
+        this.carID = carID;
+        this.date = date;
+        this.description = description;
+    }
+
     public int getReportID() {
         return reportID;
     }

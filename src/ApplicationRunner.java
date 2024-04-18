@@ -1,6 +1,7 @@
 import Controller.Controller;
 import Models.Bookings;
 import Models.Cars;
+import Models.Feedbacks;
 import Models.Insurances;
 import Models.Model;
 import Models.Payments;
@@ -23,8 +24,10 @@ public class ApplicationRunner extends Application {
         Users userModel = new Users();
         Insurances insuranceModel = new Insurances();
         Payments paymentModel = new Payments();
+        Feedbacks feedbackModel = new Feedbacks();
 
         Controller controller = new Controller(view, cars, bookingModel, userModel, insuranceModel, paymentModel,
+                feedbackModel,
                 view.getPrimaryStage());
     }
 

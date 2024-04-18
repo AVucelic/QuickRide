@@ -16,9 +16,9 @@ import Models.Booking;
 import Models.Bookings;
 import Models.Car;
 import Models.Cars;
+import Models.Feedbacks;
 import Models.Insurance;
 import Models.Insurances;
-import Models.Model;
 import Models.Payment;
 import Models.Payments;
 import Models.User;
@@ -58,10 +58,11 @@ public class Controller implements EventHandler<ActionEvent> {
     private Stage primaryStage; // We need access to the primary stage for view switching
     private User currentUser;
     private SuccessView successView = new SuccessView();
-    private AdminView adminView = new AdminView();
+    private AdminView adminView;
     private MySQLDatabase database = new MySQLDatabase("root", "ritcroatia");
-    private Insurances insuranceModel = new Insurances();
-    private Payments paymentModel = new Payments();
+    private Insurances insuranceModel;
+    private Payments paymentModel;
+    private Feedbacks feedbackModel;
 
     public Bookings getBookingsModel() {
         return bookingsModel;
@@ -72,7 +73,7 @@ public class Controller implements EventHandler<ActionEvent> {
     }
 
     public Controller(View view, Cars carsModel, Bookings bookingModel, Users userModel, Insurances insuranceModel,
-            Payments paymentModel,
+            Payments paymentModel, Feedbacks feedbackModel,
             Stage primaryStage)
             throws DLException {
         this.view = view;
@@ -82,6 +83,7 @@ public class Controller implements EventHandler<ActionEvent> {
         this.primaryStage = primaryStage;
         this.insuranceModel = insuranceModel;
         this.paymentModel = paymentModel;
+        this.feedbackModel = feedbackModel;
         HandleLogin login = new HandleLogin(this, view, userModel);
         this.view.handleLogin(login);
         // this.view.handleRegister(register);
@@ -99,6 +101,10 @@ public class Controller implements EventHandler<ActionEvent> {
     public void switchToSuccessView(User user) {
         currentUser = user;
         successView.start(primaryStage);
+        // private HandleFeedback feedbackHandler = new HandleFeedback(successView,
+        // null)
+        HandleFeedback feedbackHandler = new HandleFeedback(successView, feedbackModel, currentUser);
+        this.successView.HandleFeedback(feedbackHandler);
         this.successView.getSortByComboBox().setValue("Manufacturer");
         this.successView.getSortOrderComboBox().setValue("Ascending");
         this.successView.getFirstPageButton().setOnAction(e -> this.goToFirstPage());

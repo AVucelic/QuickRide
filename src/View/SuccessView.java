@@ -1,7 +1,11 @@
 package View;
 
+import javax.swing.Action;
+
 import javafx.application.Application;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -31,6 +35,11 @@ public class SuccessView extends Application {
     private AnchorPane root = new AnchorPane();
     private Button bookingBtn = new Button("Bookings");
     private Button bookACar = new Button("Book a car");
+    private Button feedback = new Button("Leave Feedback");
+
+    public void HandleFeedback(EventHandler<ActionEvent> event) {
+        feedback.setOnAction(event);
+    }
 
     public Button getBookACar() {
         return bookACar;
@@ -135,6 +144,9 @@ public class SuccessView extends Application {
         showAllCarsCheckBox.setLayoutY(70);
         root.getChildren().add(showAllCarsCheckBox);
 
+        feedback.setLayoutX(600);
+        feedback.setLayoutY(700);
+        root.getChildren().add(feedback);
         return root;
     }
 
@@ -180,6 +192,70 @@ public class SuccessView extends Application {
 
     public Button getPreviousPageButton() {
         return previousPageButton;
+    }
+
+    public void setListView(ListView<String> listView) {
+        this.listView = listView;
+    }
+
+    public void setSearchTF(TextField searchTF) {
+        this.searchTF = searchTF;
+    }
+
+    public void setSortByComboBox(ComboBox<String> sortByComboBox) {
+        this.sortByComboBox = sortByComboBox;
+    }
+
+    public void setSortOrderComboBox(ComboBox<String> sortOrderComboBox) {
+        this.sortOrderComboBox = sortOrderComboBox;
+    }
+
+    public void setShowAllCarsCheckBox(CheckBox showAllCarsCheckBox) {
+        this.showAllCarsCheckBox = showAllCarsCheckBox;
+    }
+
+    public void setFirstPageButton(Button firstPageButton) {
+        this.firstPageButton = firstPageButton;
+    }
+
+    public void setLastPageButton(Button lastPageButton) {
+        this.lastPageButton = lastPageButton;
+    }
+
+    public void setNextPageButton(Button nextPageButton) {
+        this.nextPageButton = nextPageButton;
+    }
+
+    public void setPreviousPageButton(Button previousPageButton) {
+        this.previousPageButton = previousPageButton;
+    }
+
+    public void setCurrentPage(int currentPage) {
+        this.currentPage = currentPage;
+    }
+
+    public void setRoot(AnchorPane root) {
+        this.root = root;
+    }
+
+    public void setBookingBtn(Button bookingBtn) {
+        this.bookingBtn = bookingBtn;
+    }
+
+    public void setBookACar(Button bookACar) {
+        this.bookACar = bookACar;
+    }
+
+    public Button getFeedback() {
+        return feedback;
+    }
+
+    public void setFeedback(Button feedback) {
+        this.feedback = feedback;
+    }
+
+    public void setScene(Scene scene) {
+        this.scene = scene;
     }
 
 }
