@@ -52,9 +52,9 @@ public class HandleFeedback implements EventHandler<ActionEvent> {
             // Handle feedback submission here
             int rating = ratingComboBox.getValue();
             String description = feedbackDescriptionTextArea.getText();
-            LocalDateTime now = LocalDateTime.now();
             if (!(rating <= 0 && description.equals(""))) {
 
+                LocalDateTime now = LocalDateTime.now();
                 Timestamp timestamp = Timestamp.valueOf(now);
                 Feedback feedback = new Feedback(current.getUserID(), description, rating, timestamp);
                 try {

@@ -43,8 +43,7 @@ public class Feedbacks extends Model {
         arr.add(feedback.getFeedBack());
         arr.add(feedback.getRating() + "");
         arr.add(feedback.getTime() + "");
-        db.executeUpdate(statement, arr);
-        return true;
+        return db.executeUpdate(statement, arr);
 
     }
 
