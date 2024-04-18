@@ -76,9 +76,10 @@ public class Users extends Model {
         params.add(user.getPassoword());
         params.add(user.getFirstName());
         params.add(user.getLastName());
-        db.executeUpdate("INSERT INTO User (username, email, password, firstname, lastname) VALUES (?, ?, ?, ?, ?)",
+        return db.executeUpdate(
+                "INSERT INTO User (username, email, password, firstname, lastname) VALUES (?, ?, ?, ?, ?)",
                 params);
-        return true;
+
     }
 
 }

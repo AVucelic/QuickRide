@@ -42,8 +42,7 @@ public class Reports extends Model {
         param.add(report.getDescription());
         param.add(report.getDate() + "");
 
-        db.executeUpdate(statement, param);
-        return true;
+        return db.executeUpdate(statement, param);
 
     }
 

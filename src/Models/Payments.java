@@ -52,9 +52,8 @@ public class Payments extends Model {
         arr.add(payment.getCardDetails() + "");
         arr.add(payment.getCardType());
         arr.add(payment.getTimestamp().toString()); // Convert Timestamp to String
-        db.executeUpdate(statement, arr);
+        return db.executeUpdate(statement, arr);
 
-        return true;
     }
 
     @Override

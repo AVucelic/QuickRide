@@ -41,8 +41,7 @@ public class Maintenances extends Model {
         arr.add(maintenance.getCarID() + "");
         arr.add(maintenance.getEndDate() + "");
         arr.add(maintenance.getDescription());
-        db.executeUpdate(statement, arr);
-        return true;
+        return db.executeUpdate(statement, arr);
     }
 
 }
