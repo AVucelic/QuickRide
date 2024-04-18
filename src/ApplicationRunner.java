@@ -7,6 +7,7 @@ import Models.Maintenances;
 import Models.Model;
 import Models.Payments;
 import Models.Users;
+import Models.Reports;
 import View.View;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -27,9 +28,10 @@ public class ApplicationRunner extends Application {
         Payments paymentModel = new Payments();
         Feedbacks feedbackModel = new Feedbacks();
         Maintenances maintenances = new Maintenances();
+        Reports reports =new Reports();
 
         Controller controller = new Controller(view, cars, bookingModel, userModel, insuranceModel, paymentModel,
-                feedbackModel, maintenances,
+                feedbackModel, maintenances,reports,
                 view.getPrimaryStage());
     }
 

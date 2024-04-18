@@ -22,6 +22,8 @@ import Models.Insurances;
 import Models.Maintenances;
 import Models.Payment;
 import Models.Payments;
+import Models.Report;
+import Models.Reports;
 import Models.User;
 import Models.Users;
 import View.View;
@@ -42,6 +44,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -60,11 +63,12 @@ public class Controller implements EventHandler<ActionEvent> {
     private User currentUser;
     private SuccessView successView = new SuccessView();
     private AdminView adminView = new AdminView();
-    private MySQLDatabase database = new MySQLDatabase("root", "jupi1231");
+    private MySQLDatabase database = new MySQLDatabase("root", "Saelda1997");
     private Insurances insuranceModel;
     private Payments paymentModel;
     private Maintenances maintenancesModel;
     private Feedbacks feedbackModel;
+    private Reports reportModel;
 
     public Bookings getBookingsModel() {
         return bookingsModel;
@@ -75,7 +79,7 @@ public class Controller implements EventHandler<ActionEvent> {
     }
 
     public Controller(View view, Cars carsModel, Bookings bookingModel, Users userModel, Insurances insuranceModel,
-            Payments paymentModel, Feedbacks feedbackModel, Maintenances maintenancesModel,
+            Payments paymentModel, Feedbacks feedbackModel, Maintenances maintenancesModel, Reports reportModel,
             Stage primaryStage)
             throws DLException {
         this.maintenancesModel = maintenancesModel;
@@ -87,6 +91,7 @@ public class Controller implements EventHandler<ActionEvent> {
         this.insuranceModel = insuranceModel;
         this.paymentModel = paymentModel;
         this.feedbackModel = feedbackModel;
+        this.reportModel = reportModel;
         HandleLogin login = new HandleLogin(this, view, userModel);
         this.view.handleLogin(login);
         // this.view.handleRegister(register);
@@ -375,6 +380,7 @@ public class Controller implements EventHandler<ActionEvent> {
         Button removeBooking = new Button("Cancel booking");
         Button modifyBooking = new Button("Modify booking");
         Button checkPaymentAndInsurance = new Button("Check Insurance and Payment method");
+        Button damageReport = new Button("Damage Report");
         backButton.setOnAction(event -> {
             // Go back to the main user view scene
             primaryStage.setScene(this.successView.getScene());
@@ -438,8 +444,9 @@ public class Controller implements EventHandler<ActionEvent> {
 
         removeBooking.setOnAction(event -> removeBooking());
         modifyBooking.setOnAction(event -> modifyBooking());
+        damageReport.setOnAction(event -> reportDamage());
         vbox.getChildren().addAll(bookingsListView, backButton, removeBooking, modifyBooking, checkPaymentAndInsurance,
-                showPastCheckBox);
+                showPastCheckBox, damageReport);
 
         // Initially load current bookings
 
@@ -878,7 +885,9 @@ public class Controller implements EventHandler<ActionEvent> {
             alert.showAndWait();
         }
     }
+    
 
+    
     private int extractBookingID(String bookingString) {
         String[] parts = bookingString.split(":");
         String[] bookID = parts[1].split(",");
@@ -1063,5 +1072,77 @@ public class Controller implements EventHandler<ActionEvent> {
     public void setBookingsListView(ListView<String> bookingsListView) {
         this.bookingsListView = bookingsListView;
     }
+
+
+
+    public void reportDamage() {
+        String selectedBookingString = this.bookingsListView.getSelectionModel().getSelectedItem();
+        if (selectedBookingString != null) {
+            int bookingID = extractBookingID(selectedBookingString);
+            Car car = getCarByBookingID(bookingID);
+            Stage popupStage = new Stage();
+            popupStage.setTitle("Report Damage");
+    
+            Label carIdLabel = new Label("Car ID: " + car.getCarID());
+            TextArea damageDescriptionTextArea = new TextArea();
+            damageDescriptionTextArea.setPromptText("Enter damage description here...");
+    
+            Button submitButton = new Button("Submit");
+            submitButton.setOnAction(event -> {
+                String damageDescription = damageDescriptionTextArea.getText();
+                if (!damageDescription.isEmpty()) {
+                    try {
+                       
+                        Report report = new Report(car.getCarID(), new Timestamp(System.currentTimeMillis()), damageDescription);
+                        boolean success = reportModel.setData(report);
+                        if (success) {
+                            Alert successAlert = new Alert(AlertType.INFORMATION);
+                            successAlert.setTitle("Damage Reported");
+                            successAlert.setHeaderText(null);
+                            successAlert.setContentText("Damage reported successfully.");
+                            successAlert.showAndWait();
+                        } else {
+                            Alert errorAlert = new Alert(AlertType.ERROR);
+                            errorAlert.setTitle("Reporting Damage Error");
+                            errorAlert.setHeaderText(null);
+                            errorAlert.setContentText("Failed to report damage. Please try again.");
+                            errorAlert.showAndWait();
+                        }
+                    } catch (DLException e) {
+                        e.printStackTrace();
+    
+                        Alert errorAlert = new Alert(AlertType.ERROR);
+                        errorAlert.setTitle("Reporting Damage Error");
+                        errorAlert.setHeaderText(null);
+                        errorAlert.setContentText("An error occurred while reporting damage. Please try again.");
+                        errorAlert.showAndWait();
+                    }
+                    popupStage.close();
+                } else {
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setTitle("Missing Description");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Please enter a description of the damage.");
+                    alert.showAndWait();
+                }
+            });
+    
+            VBox vbox = new VBox(carIdLabel, damageDescriptionTextArea, submitButton);
+            vbox.setSpacing(10);
+    
+            Scene scene = new Scene(vbox, 300, 200);
+    
+            popupStage.setScene(scene);
+    
+            popupStage.show();
+        } else {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("No Booking Selected");
+            alert.setHeaderText(null);
+            alert.setContentText("Please select a booking to report damage.");
+            alert.showAndWait();
+        }
+    }
+    
 
 }
