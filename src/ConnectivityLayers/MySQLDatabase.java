@@ -21,28 +21,28 @@ public class MySQLDatabase {
         this.password = password;
     }
 
-    public boolean connect() throws DLExeption {
+    public boolean connect() throws DLException {
         try {
 
             connection = DriverManager.getConnection(this.url, this.username, this.password);
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new DLExeption(e, additionalDetails("Falied to Connect Driver. Line: 66 on MySQLDatabase class"));
+            throw new DLException(e, additionalDetails("Falied to Connect Driver. Line: 66 on MySQLDatabase class"));
         }
     }
 
-    public boolean close() throws DLExeption {
+    public boolean close() throws DLException {
         try {
             this.connection.close();
             return true;
         } catch (SQLException e) {
-            throw new DLExeption(e,
+            throw new DLException(e,
                     additionalDetails("Falied to Close connection."));
         }
     }
 
-    public PreparedStatement prepare(String statement, ArrayList<String> arr) throws DLExeption {
+    public PreparedStatement prepare(String statement, ArrayList<String> arr) throws DLException {
         try {
             // checking if the connection is closed or null, establishing connection
             if (this.connection == null || connection.isClosed()) {
@@ -58,11 +58,11 @@ public class MySQLDatabase {
 
             return preparedStatement;
         } catch (SQLException e) {
-            throw new DLExeption(e, additionalDetails("Failed to prepare statement."));
+            throw new DLException(e, additionalDetails("Failed to prepare statement."));
         }
     }
 
-    public ArrayList<ArrayList<String>> executeQuery(String statement, ArrayList<String> arr) throws DLExeption {
+    public ArrayList<ArrayList<String>> executeQuery(String statement, ArrayList<String> arr) throws DLException {
 
         PreparedStatement preparedStatement = prepare(statement, arr);
 
@@ -94,11 +94,11 @@ public class MySQLDatabase {
             return twoD;
 
         } catch (SQLException e) {
-            throw new DLExeption(e, additionalDetails("Failed to execute getData with prepared statement"));
+            throw new DLException(e, additionalDetails("Failed to execute getData with prepared statement"));
         }
     }
 
-    public boolean executeUpdate(String statement, ArrayList<String> arr) throws DLExeption {
+    public boolean executeUpdate(String statement, ArrayList<String> arr) throws DLException {
         try {
             PreparedStatement preparedStatement = prepare(statement, arr);
             int result = preparedStatement.executeUpdate();
@@ -106,7 +106,7 @@ public class MySQLDatabase {
             return result > 0;
         } catch (SQLException e) {
             e.printStackTrace(); // Prints the full stack trace for better diagnosis
-            throw new DLExeption(e, additionalDetails("Failed to execute update/delete statement."));
+            throw new DLException(e, additionalDetails("Failed to execute update/delete statement."));
         }
     }
 
@@ -120,7 +120,7 @@ public class MySQLDatabase {
     }
 
     // Start a transaction
-    public boolean startTrans() throws DLExeption {
+    public boolean startTrans() throws DLException {
         try {
             if (!isInTransaction && connection != null) {
                 connection.setAutoCommit(false);
@@ -132,12 +132,12 @@ public class MySQLDatabase {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new DLExeption(e, additionalDetails("Failed to start a transaction."));
+            throw new DLException(e, additionalDetails("Failed to start a transaction."));
         }
     }
 
     // End a transaction (commit changes)
-    public boolean endTrans() throws DLExeption {
+    public boolean endTrans() throws DLException {
         try {
             if (isInTransaction && connection != null) {
                 connection.commit();
@@ -150,12 +150,12 @@ public class MySQLDatabase {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new DLExeption(e, additionalDetails("Failed to end a transaction."));
+            throw new DLException(e, additionalDetails("Failed to end a transaction."));
         }
     }
 
     // Rollback a transaction
-    public boolean rollbackTrans() throws DLExeption {
+    public boolean rollbackTrans() throws DLException {
         try {
             if (isInTransaction && connection != null) {
                 connection.rollback();
@@ -168,7 +168,7 @@ public class MySQLDatabase {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new DLExeption(e, additionalDetails("Failed to rollback a transaction."));
+            throw new DLException(e, additionalDetails("Failed to rollback a transaction."));
         }
     }
 

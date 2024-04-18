@@ -3,7 +3,7 @@ package Models;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
-import ConnectivityLayers.DLExeption;
+import ConnectivityLayers.DLException;
 
 public class Bookings extends Model {
     ArrayList<Object> bookings;
@@ -22,7 +22,7 @@ public class Bookings extends Model {
         id = userid;
     }
 
-    public ArrayList<Object> getData() throws DLExeption {
+    public ArrayList<Object> getData() throws DLException {
         ArrayList<String> params = new ArrayList<>();
         params.add(id + "");
         params.add("active");
@@ -42,7 +42,7 @@ public class Bookings extends Model {
      * Modifies the booking with the specified booking ID by updating the car ID and
      * booking time
      */
-    public boolean modify(int bookingID, int newCarID, Timestamp newBookingTime) throws DLExeption {
+    public boolean modify(int bookingID, int newCarID, Timestamp newBookingTime) throws DLException {
         String updateQuery = "UPDATE Booking SET carID = ?, timestamp = ? WHERE bookingID = ?";
         ArrayList<String> params = new ArrayList<>();
         params.add(Integer.toString(newCarID));
@@ -56,7 +56,7 @@ public class Bookings extends Model {
      * Cancels the booking with the specified booking ID by updating its status to
      * 'cancelled'
      */
-    public boolean remove(int bookingID) throws DLExeption {
+    public boolean remove(int bookingID) throws DLException {
         String updateQuery = "UPDATE Booking SET status = 'cancelled' WHERE bookingID = ?";
         ArrayList<String> params = new ArrayList<>();
         params.add(Integer.toString(bookingID));
@@ -64,7 +64,7 @@ public class Bookings extends Model {
     }
 
     /** just for testing */
-    public ArrayList<Object> getAllBookings() throws DLExeption {
+    public ArrayList<Object> getAllBookings() throws DLException {
         String query = "SELECT * FROM Booking";
         ArrayList<ArrayList<String>> data = db.executeQuery(query, new ArrayList<>());
         ArrayList<Object> bookings = new ArrayList<>();
@@ -85,12 +85,27 @@ public class Bookings extends Model {
     }
 
     @Override
-    public boolean setData(Object newData) throws DLExeption {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setData'");
+    public boolean setData(Object newData) throws DLException {
+        Booking booking = (Booking) newData;
+        String insertQuery = "INSERT INTO Booking (userID, carID, timestamp) VALUES (?, ?, ?)";
+        ArrayList<String> params = new ArrayList<>();
+        params.add(String.valueOf(booking.getUserID())); // user ID parameter
+        params.add(String.valueOf(booking.getCarID())); // car ID parameter
+        params.add(booking.getTimeBooked().toString()); // booking timestamp parameter
+        if (db.executeUpdate(insertQuery, params)) {
+            System.out.println("Car booked successfully!");
+            String updateQuery = "UPDATE Car SET isAvailable = 0 WHERE carID = ?";
+            ArrayList<String> params2 = new ArrayList<>();
+            params2.add(booking.getCarID() + "");
+            db.executeUpdate(updateQuery, params2);
+            return true;
+        } else {
+            System.out.println("Failed to book the car.");
+            return false;
+        }
     }
 
-    public void bookACar(int carID, int userID) throws DLExeption {
+    public void bookACar(int carID, int userID) throws DLException {
         // Assuming db is accessible here and represents the database connectivity
         Timestamp bookingTime = new Timestamp(System.currentTimeMillis());
         String insertQuery = "INSERT INTO Booking (userID, carID, timestamp) VALUES (?, ?, ?)";
@@ -110,7 +125,7 @@ public class Bookings extends Model {
         }
     }
 
-    public Booking getBookingByID(int bookingID) throws DLExeption {
+    public Booking getBookingByID(int bookingID) throws DLException {
         for (Object obj : bookings) {
             if (obj instanceof Booking) {
                 Booking booking = (Booking) obj;

@@ -1,6 +1,8 @@
 DROP DATABASE IF EXISTS QuickRide; 
 CREATE DATABASE QuickRide; 
 USE QuickRide;
+SET FOREIGN_KEY_CHECKS = 0;
+
 
 DROP TABLE IF EXISTS User;
 CREATE TABLE User(
@@ -63,14 +65,13 @@ DROP TABLE IF EXISTS Payment;
 CREATE TABLE Payment(
     paymentID INT PRIMARY KEY AUTO_INCREMENT,
     userID INT,  
-    bookingID INT,
+    carID INT,
     amount DOUBLE(8,2),
     method ENUM('Card','Cash'),
     card_details BIGINT,
-    card_type VARCHAR(10),
+    card_type VARCHAR(20),
     timestamp DATETIME,
-    FOREIGN KEY(userID) REFERENCES User(userID), 
-    FOREIGN KEY(bookingID) REFERENCES Booking(bookingID) ON DELETE CASCADE  -- Add ON DELETE CASCADE here
+    FOREIGN KEY(carID) REFERENCES Car(carID) ON DELETE CASCADE  -- Add ON DELETE CASCADE here
 );
 
 
@@ -101,7 +102,7 @@ CREATE TABLE Insurance(
     insuranceID INT PRIMARY KEY AUTO_INCREMENT,
     carID INT,
     FOREIGN KEY(carID) REFERENCES Car(carID) ON DELETE CASCADE,
-    insurance_model ENUM('basic', 'premium', 'standard')
+    insurance_model ENUM('Basic', 'Premium', 'Standard')
 );
 
 DROP TABLE IF EXISTS Maintenance;
@@ -176,7 +177,7 @@ INSERT INTO Booking (userID, carID, timestamp)
 VALUES
     (1, 1, NOW()),
     (2, 2, NOW());
-INSERT INTO Payment (userID, bookingID, amount, method, card_details, card_type, timestamp)
+INSERT INTO Payment (userID, carID, amount, method, card_details, card_type, timestamp)
 VALUES
     (1, 1, 50.00, 'Card', 1234567812345678, 'Visa', NOW()),
     (2, 2, 40.00, 'Cash', NULL, NULL, NOW());

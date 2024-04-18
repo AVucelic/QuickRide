@@ -48,6 +48,12 @@ public class Booking {
         this.userID = userID;
     }
 
+    public Booking(int userID, int carID, Timestamp timeBooked) {
+        this.timeBooked = timeBooked;
+        this.carID = carID;
+        this.userID = userID;
+    }
+
     @Override
     public String toString() {
         return "Booking ID: " + bookingID +

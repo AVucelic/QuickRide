@@ -2,7 +2,7 @@ package Controller;
 
 import java.util.ArrayList;
 
-import ConnectivityLayers.DLExeption;
+import ConnectivityLayers.DLException;
 import Models.Model;
 import Models.User;
 import View.View;
@@ -44,7 +44,7 @@ public class HandleLogin implements EventHandler<ActionEvent> {
                     "Incorrect Username or password.");
             alert.showAndWait();
             // If no match is found, you can handle invalid login here
-        } catch (DLExeption e) {
+        } catch (DLException e) {
             // Handle exception
             e.printStackTrace();
         }

@@ -1,7 +1,9 @@
 import Controller.Controller;
 import Models.Bookings;
 import Models.Cars;
+import Models.Insurances;
 import Models.Model;
+import Models.Payments;
 import Models.Users;
 import View.View;
 import javafx.application.Application;
@@ -19,8 +21,11 @@ public class ApplicationRunner extends Application {
         Cars cars = new Cars();
         Bookings bookingModel = new Bookings(1);
         Users userModel = new Users();
+        Insurances insuranceModel = new Insurances();
+        Payments paymentModel = new Payments();
 
-        Controller controller = new Controller(view, cars, bookingModel, userModel, view.getPrimaryStage());
+        Controller controller = new Controller(view, cars, bookingModel, userModel, insuranceModel, paymentModel,
+                view.getPrimaryStage());
     }
 
 }

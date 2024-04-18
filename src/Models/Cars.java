@@ -3,7 +3,7 @@ package Models;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
-import ConnectivityLayers.DLExeption;
+import ConnectivityLayers.DLException;
 
 public class Cars extends Model {
     ArrayList<Object> cars;
@@ -12,7 +12,7 @@ public class Cars extends Model {
         cars = new ArrayList<>();
     }
 
-    public ArrayList<Object> getData() throws DLExeption {
+    public ArrayList<Object> getData() throws DLException {
         this.cars = new ArrayList<>();
         String statement = "SELECT * FROM Car";
         ArrayList<ArrayList<String>> data = db.executeQuery(statement, new ArrayList<>());
@@ -27,14 +27,14 @@ public class Cars extends Model {
     }
 
     @Override
-    public boolean remove(int ID) throws DLExeption {
+    public boolean remove(int ID) throws DLException {
         String statement = "DELETE FROM Car WHERE carID = ?";
         ArrayList<String> params = new ArrayList<>();
         params.add(String.valueOf(ID));
         return db.executeUpdate(statement, params);
     }
 
-    public boolean modifyCar(int carID, int mileage, String status) throws DLExeption {
+    public boolean modifyCar(int carID, int mileage, String status) throws DLException {
         String statement = "UPDATE Car SET mileage = ?, isAvailable = ? WHERE carID = ?";
         ArrayList<String> params = new ArrayList<>();
         params.add(String.valueOf(mileage));
@@ -44,7 +44,7 @@ public class Cars extends Model {
     }
 
     @Override
-    public boolean setData(Object newData) throws DLExeption {
+    public boolean setData(Object newData) throws DLException {
         if (newData instanceof Car) {
             Car newCar = (Car) newData;
             String statement = "INSERT INTO Car (manufacturer, model, power, year_of_Production, mileage, isAvailable, price) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -78,12 +78,12 @@ public class Cars extends Model {
     }
 
     @Override
-    public boolean modify(int bookingID, int newCarID, Timestamp newBookingTime) throws DLExeption {
+    public boolean modify(int bookingID, int newCarID, Timestamp newBookingTime) throws DLException {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'modify'");
     }
 
-    public Car getCarByID(int carID) throws DLExeption {
+    public Car getCarByID(int carID) throws DLException {
         for (Object obj : cars) {
             if (obj instanceof Car) {
                 Car car = (Car) obj;

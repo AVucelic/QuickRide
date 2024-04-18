@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
-import ConnectivityLayers.DLExeption;
+import ConnectivityLayers.DLException;
 import Controller.Controller;
 import Models.*;
 

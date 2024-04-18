@@ -8,17 +8,17 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class DLExeption extends Exception {
+public class DLException extends Exception {
     Exception exception;
 
-    public DLExeption(Exception e) {
+    public DLException(Exception e) {
         // source for setting initial messages:
         // https://stackoverflow.com/questions/30542846/java-default-exception-messages
         super("Unable to complete operation. Please contact the administrator.");
         log(e);
     }
 
-    public DLExeption(Exception e, String[] additionalMessage) {
+    public DLException(Exception e, String[] additionalMessage) {
         super("Unable to complete operation. Please contact the administrator.");
         logAdditional(e, additionalMessage);
     }

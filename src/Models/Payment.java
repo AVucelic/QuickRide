@@ -6,22 +6,44 @@ public class Payment {
 
     private int userID;
     private int paymentId;
-    private int bookingId;
+    private int carID;
     private double amount;
     private String method;
-    private int cardDetails;
+    private String cardDetails;
     private String cardType;
     private Timestamp timestamp;
 
-    public Payment(int paymentId, int userID, int bookingId, double amount, String method, int cardDetails, String cardType,
+    public Payment(int paymentId, int userID, int carID, double amount, String method, String cardDetails,
+            String cardType,
             java.sql.Timestamp timestamp) {
         this.paymentId = paymentId;
         this.userID = userID;
-        this.bookingId = bookingId;
+        this.carID = carID;
         this.amount = amount;
         this.method = method;
         this.cardDetails = cardDetails;
         this.cardType = cardType;
+        this.timestamp = timestamp;
+    }
+
+    public Payment(int userID, int carID, double amount, String method, String cardDetails, String cardType,
+            java.sql.Timestamp timestamp) {
+        this.userID = userID;
+        this.carID = carID;
+        this.amount = amount;
+        this.method = method;
+        this.cardDetails = cardDetails;
+        this.cardType = cardType;
+        this.timestamp = timestamp;
+    }
+
+    public Payment(int userID, int carID, double amount, String method,
+            java.sql.Timestamp timestamp) {
+        this.userID = userID;
+        this.carID = carID;
+        this.amount = amount;
+        this.method = method;
+    
         this.timestamp = timestamp;
     }
 
@@ -33,12 +55,12 @@ public class Payment {
         this.paymentId = paymentId;
     }
 
-    public int getBookingId() {
-        return bookingId;
+    public int getcarID() {
+        return carID;
     }
 
-    public void setBookingId(int bookingId) {
-        this.bookingId = bookingId;
+    public void setcarID(int carID) {
+        this.carID = carID;
     }
 
     public double getAmount() {
@@ -57,11 +79,11 @@ public class Payment {
         this.method = method;
     }
 
-    public int getCardDetails() {
+    public String getCardDetails() {
         return cardDetails;
     }
 
-    public void setCardDetails(int cardDetails) {
+    public void setCardDetails(String cardDetails) {
         this.cardDetails = cardDetails;
     }
 
@@ -89,5 +111,18 @@ public class Payment {
         this.userID = userID;
     }
 
+    @Override
+    public String toString() {
+        return "Payment{" +
+                "paymentId=" + paymentId +
+                ", userID=" + userID +
+                ", carID=" + carID +
+                ", amount=" + amount +
+                ", method='" + method + '\'' +
+                ", cardDetails=" + cardDetails +
+                ", cardType='" + cardType + '\'' +
+                ", timestamp=" + timestamp +
+                '}';
+    }
 
 }

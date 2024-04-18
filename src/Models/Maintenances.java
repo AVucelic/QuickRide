@@ -4,13 +4,13 @@ import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
-import ConnectivityLayers.DLExeption;
+import ConnectivityLayers.DLException;
 
 public class Maintenances extends Model {
     ArrayList<Object> maintenances;
 
     @Override
-    public ArrayList<Object> getData() throws DLExeption {
+    public ArrayList<Object> getData() throws DLException {
         String statement = "Select * from Maintenance;";
         ArrayList<ArrayList<String>> arr = db.executeQuery(statement, new ArrayList<String>());
         for (int i = 0; i < arr.size(); i++) {
@@ -22,19 +22,19 @@ public class Maintenances extends Model {
     }
 
     @Override
-    public boolean modify(int bookingID, int newCarID, Timestamp newBookingTime) throws DLExeption {
+    public boolean modify(int bookingID, int newCarID, Timestamp newBookingTime) throws DLException {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'modify'");
     }
 
     @Override
-    public boolean remove(int ID) throws DLExeption {
+    public boolean remove(int ID) throws DLException {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'remove'");
     }
 
     @Override
-    public boolean setData(Object newData) throws DLExeption {
+    public boolean setData(Object newData) throws DLException {
         Maintenance maintenance = (Maintenance) newData;
         String statement = "INSERT INTO Maintenance (carID ,  schedule_date , description) VALUES (?, ?, ?)";
         ArrayList<String> arr = new ArrayList<>();

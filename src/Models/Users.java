@@ -3,7 +3,7 @@ package Models;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
-import ConnectivityLayers.DLExeption;
+import ConnectivityLayers.DLException;
 
 public class Users extends Model {
     ArrayList<Object> users;
@@ -13,7 +13,7 @@ public class Users extends Model {
     }
 
     @Override
-    public ArrayList<Object> getData() throws DLExeption {
+    public ArrayList<Object> getData() throws DLException {
         this.users = new ArrayList<>();
         ArrayList<String> params = new ArrayList<>();
         String statement = "Select * from User";
@@ -26,7 +26,7 @@ public class Users extends Model {
         return users;
     }
 
-    public boolean userExists(String username) throws DLExeption {
+    public boolean userExists(String username) throws DLException {
         ArrayList<String> params = new ArrayList<>();
         params.add(username);
         // ArrayList<ArrayList<String>> data = db.executeQuery("SELECT * FROM User WHERE
@@ -44,7 +44,7 @@ public class Users extends Model {
 
     }
 
-    public void addUser(User user) throws DLExeption {
+    public void addUser(User user) throws DLException {
         ArrayList<String> params = new ArrayList<>();
         params.add(user.getUsername());
         params.add(user.getEmail());
@@ -56,19 +56,19 @@ public class Users extends Model {
     }
 
     @Override
-    public boolean remove(int id) throws DLExeption {
+    public boolean remove(int id) throws DLException {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'remove'");
     }
 
     @Override
-    public boolean modify(int bookingID, int newCarID, Timestamp newBookingTime) throws DLExeption {
+    public boolean modify(int bookingID, int newCarID, Timestamp newBookingTime) throws DLException {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'modify'");
     }
 
     @Override
-    public boolean setData(Object newData) throws DLExeption {
+    public boolean setData(Object newData) throws DLException {
         User user = (User) newData;
         ArrayList<String> params = new ArrayList<>();
         params.add(user.getUsername());

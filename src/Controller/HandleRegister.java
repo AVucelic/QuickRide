@@ -1,6 +1,6 @@
 package Controller;
 
-import ConnectivityLayers.DLExeption;
+import ConnectivityLayers.DLException;
 import Models.User;
 import Models.Users;
 import View.View;
@@ -48,7 +48,7 @@ public class HandleRegister implements EventHandler<ActionEvent> {
 
             }
 
-        } catch (DLExeption e) {
+        } catch (DLException e) {
             e.printStackTrace();
         }
     }

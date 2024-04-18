@@ -3,13 +3,13 @@ package Models;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
-import ConnectivityLayers.DLExeption;
+import ConnectivityLayers.DLException;
 
 public class Feedbacks extends Model {
     ArrayList<Object> feedbacks;
 
     @Override
-    public ArrayList<Object> getData() throws DLExeption {
+    public ArrayList<Object> getData() throws DLException {
         this.feedbacks = new ArrayList<>();
         String statement = "SELECT * FROM Feedback";
         ArrayList<ArrayList<String>> data = db.executeQuery(statement, new ArrayList<>());
@@ -23,19 +23,19 @@ public class Feedbacks extends Model {
     }
 
     @Override
-    public boolean modify(int bookingID, int newCarID, Timestamp newBookingTime) throws DLExeption {
+    public boolean modify(int bookingID, int newCarID, Timestamp newBookingTime) throws DLException {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'modify'");
     }
 
     @Override
-    public boolean remove(int ID) throws DLExeption {
+    public boolean remove(int ID) throws DLException {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'remove'");
     }
 
     @Override
-    public boolean setData(Object newData) throws DLExeption {
+    public boolean setData(Object newData) throws DLException {
         Feedback feedback = (Feedback) newData;
         String statement = "INSERT INTO Feedback (userID ,  feedback_message, rating , timestamp) VALUES (?, ?, ?, ?)";
         ArrayList<String> arr = new ArrayList<>();
