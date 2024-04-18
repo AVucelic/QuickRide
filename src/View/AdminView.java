@@ -1,20 +1,14 @@
 package View;
 
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
-
-import ConnectivityLayers.DLException;
-import Controller.Controller;
 import Models.*;
 
 public class AdminView extends Application {
@@ -22,17 +16,22 @@ public class AdminView extends Application {
     private Cars carsModel = new Cars();
     private TableView<Car> tableView = new TableView<>();
 
-    Button addButton = new Button("Add");
-    Button deleteButton = new Button("Delete");
-    Button modifyButton = new Button("Modify");
-    TableColumn<Car, Integer> carIDCol = new TableColumn<>("Car ID");
-    TableColumn<Car, String> manufacturerCol = new TableColumn<>("Manufacturer");
-    TableColumn<Car, String> modelCol = new TableColumn<>("Model");
-    TableColumn<Car, Integer> powerCol = new TableColumn<>("Power");
-    TableColumn<Car, Integer> yearCol = new TableColumn<>("Year of Production");
-    TableColumn<Car, Integer> mileageCol = new TableColumn<>("Mileage");
-    TableColumn<Car, String> statusCol = new TableColumn<>("Status");
-    TableColumn<Car, Double> priceCol = new TableColumn<>("Price");
+    private Button addButton = new Button("Add");
+    private Button deleteButton = new Button("Delete");
+    private Button modifyButton = new Button("Modify");
+    private Button maintenance = new Button("Send to Maintenance");
+    private TableColumn<Car, Integer> carIDCol = new TableColumn<>("Car ID");
+    private TableColumn<Car, String> manufacturerCol = new TableColumn<>("Manufacturer");
+    private TableColumn<Car, String> modelCol = new TableColumn<>("Model");
+    private TableColumn<Car, Integer> powerCol = new TableColumn<>("Power");
+    private TableColumn<Car, Integer> yearCol = new TableColumn<>("Year of Production");
+    private TableColumn<Car, Integer> mileageCol = new TableColumn<>("Mileage");
+    private TableColumn<Car, String> statusCol = new TableColumn<>("Status");
+    private TableColumn<Car, Double> priceCol = new TableColumn<>("Price");
+
+    public void HandleMaintenance(EventHandler<ActionEvent> evnet) {
+        maintenance.setOnAction(evnet);
+    }
 
     @Override
     public void start(Stage primaryStage) {
@@ -48,7 +47,9 @@ public class AdminView extends Application {
         buttonPane.setHgap(10);
         buttonPane.add(addButton, 0, 0);
         buttonPane.add(deleteButton, 1, 0);
+
         buttonPane.add(modifyButton, 2, 0);
+        buttonPane.add(maintenance, 3, 0);
 
         borderPane.setCenter(tableView);
         borderPane.setBottom(buttonPane);

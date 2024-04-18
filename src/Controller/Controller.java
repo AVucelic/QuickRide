@@ -19,6 +19,7 @@ import Models.Cars;
 import Models.Feedbacks;
 import Models.Insurance;
 import Models.Insurances;
+import Models.Maintenances;
 import Models.Payment;
 import Models.Payments;
 import Models.User;
@@ -58,10 +59,11 @@ public class Controller implements EventHandler<ActionEvent> {
     private Stage primaryStage; // We need access to the primary stage for view switching
     private User currentUser;
     private SuccessView successView = new SuccessView();
-    private AdminView adminView;
-    private MySQLDatabase database = new MySQLDatabase("root", "ritcroatia");
+    private AdminView adminView = new AdminView();
+    private MySQLDatabase database = new MySQLDatabase("root", "jupi1231");
     private Insurances insuranceModel;
     private Payments paymentModel;
+    private Maintenances maintenancesModel;
     private Feedbacks feedbackModel;
 
     public Bookings getBookingsModel() {
@@ -73,9 +75,10 @@ public class Controller implements EventHandler<ActionEvent> {
     }
 
     public Controller(View view, Cars carsModel, Bookings bookingModel, Users userModel, Insurances insuranceModel,
-            Payments paymentModel, Feedbacks feedbackModel,
+            Payments paymentModel, Feedbacks feedbackModel, Maintenances maintenancesModel,
             Stage primaryStage)
             throws DLException {
+        this.maintenancesModel = maintenancesModel;
         this.view = view;
         this.carsModel = carsModel;
         this.bookingsModel = bookingModel;
@@ -130,6 +133,8 @@ public class Controller implements EventHandler<ActionEvent> {
     public void switchToAdminView(User user) {
         currentUser = user;
         adminView.start(primaryStage);
+        HandleMaintenance maintenance = new HandleMaintenance(adminView, maintenancesModel, carsModel, this);
+        this.adminView.HandleMaintenance(maintenance);
         this.adminView.getCarIDCol().setCellValueFactory(new PropertyValueFactory<>("carID"));
         this.adminView.getManufacturerCol().setCellValueFactory(new PropertyValueFactory<>("manufacturer"));
         this.adminView.getModelCol().setCellValueFactory(new PropertyValueFactory<>("model"));
@@ -315,7 +320,7 @@ public class Controller implements EventHandler<ActionEvent> {
                                     items.add(booking.toString());
                                 }
                             }
-                            bookingsListView.setItems(items);
+                            getBookingsListView().setItems(items);
                         }
                     }
                 }
@@ -419,10 +424,11 @@ public class Controller implements EventHandler<ActionEvent> {
             }
         });
 
+        loadCurrentBookings.run();
         // Event handler for the checkbox
         showPastCheckBox.setOnAction(event -> {
-            ArrayList<Object> bookings;
-            ObservableList<String> items = FXCollections.observableArrayList();
+            // ArrayList<Object> bookings;
+            // ObservableList<String> items = FXCollections.observableArrayList();
             if (showPastCheckBox.isSelected()) {
                 loadPastBookings.run();
             } else {
@@ -436,7 +442,6 @@ public class Controller implements EventHandler<ActionEvent> {
                 showPastCheckBox);
 
         // Initially load current bookings
-        loadCurrentBookings.run();
 
         Scene bookingsScene = new Scene(vbox, 400, 300);
         primaryStage.setScene(bookingsScene);
@@ -488,6 +493,7 @@ public class Controller implements EventHandler<ActionEvent> {
         popupStage.show();
     }
 
+    @SuppressWarnings("deprecation")
     public void bookACar() {
         Car selectedCar = getSelectedCar();
         if (selectedCar != null) {

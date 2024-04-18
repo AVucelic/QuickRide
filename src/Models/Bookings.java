@@ -68,7 +68,7 @@ public class Bookings extends Model {
         String query = "SELECT * FROM Booking";
         ArrayList<ArrayList<String>> data = db.executeQuery(query, new ArrayList<>());
         ArrayList<Object> bookings = new ArrayList<>();
-
+        System.out.println("???");
         // Skip the first row (header row) containing column names
         for (int i = 1; i < data.size(); i++) {
             ArrayList<String> row = data.get(i);
@@ -79,6 +79,7 @@ public class Bookings extends Model {
 
             Booking booking = new Booking(bookingID, userID, carID, timestamp);
             bookings.add(booking);
+            System.out.println(booking.toString());
         }
 
         return bookings;

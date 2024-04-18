@@ -15,6 +15,12 @@ public class Maintenance {
         this.description = description;
     }
 
+    public Maintenance(int carID, Date endDate, String description) {
+        this.carID = carID;
+        this.endDate = endDate;
+        this.description = description;
+    }
+
     public int getMaintenanceID() {
         return maintenanceID;
     }
