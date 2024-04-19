@@ -16,12 +16,16 @@ import Models.Booking;
 import Models.Bookings;
 import Models.Car;
 import Models.Cars;
+import Models.DropOff;
+import Models.DropOffs;
 import Models.Feedbacks;
 import Models.Insurance;
 import Models.Insurances;
 import Models.Maintenances;
 import Models.Payment;
 import Models.Payments;
+import Models.PickUp;
+import Models.PickUps;
 import Models.Report;
 import Models.Reports;
 import Models.User;
@@ -34,6 +38,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -63,12 +68,14 @@ public class Controller implements EventHandler<ActionEvent> {
     private User currentUser;
     private SuccessView successView = new SuccessView();
     private AdminView adminView = new AdminView();
-    private MySQLDatabase database = new MySQLDatabase("root", "Saelda1997");
+    private MySQLDatabase database = new MySQLDatabase("root", "ritcroatia");
     private Insurances insuranceModel;
     private Payments paymentModel;
     private Maintenances maintenancesModel;
     private Feedbacks feedbackModel;
     private Reports reportModel;
+    private PickUps pickUpModel;
+    private DropOffs dropOffModel;
 
     public Bookings getBookingsModel() {
         return bookingsModel;
@@ -80,6 +87,7 @@ public class Controller implements EventHandler<ActionEvent> {
 
     public Controller(View view, Cars carsModel, Bookings bookingModel, Users userModel, Insurances insuranceModel,
             Payments paymentModel, Feedbacks feedbackModel, Maintenances maintenancesModel, Reports reportModel,
+            PickUps pickUpModel, DropOffs dropOffModel,
             Stage primaryStage)
             throws DLException {
         this.maintenancesModel = maintenancesModel;
@@ -92,6 +100,8 @@ public class Controller implements EventHandler<ActionEvent> {
         this.paymentModel = paymentModel;
         this.feedbackModel = feedbackModel;
         this.reportModel = reportModel;
+        this.pickUpModel = pickUpModel;
+        this.dropOffModel = dropOffModel;
         HandleLogin login = new HandleLogin(this, view, userModel);
         this.view.handleLogin(login);
         // this.view.handleRegister(register);
@@ -284,7 +294,6 @@ public class Controller implements EventHandler<ActionEvent> {
             ArrayList<Object> carsDataObjects = carsModel.getData();
             ArrayList<Car> carsData = new ArrayList<>();
 
-            // Perform type cast from ArrayList<Object> to ArrayList<Car>
             for (Object obj : carsDataObjects) {
                 if (obj instanceof Car) {
                     carsData.add((Car) obj);
@@ -381,12 +390,41 @@ public class Controller implements EventHandler<ActionEvent> {
         Button modifyBooking = new Button("Modify booking");
         Button checkPaymentAndInsurance = new Button("Check Insurance and Payment method");
         Button damageReport = new Button("Damage Report");
+        Button checkPickUpAndDropOff = new Button("Check PickUp and DropOff");
         backButton.setOnAction(event -> {
             // Go back to the main user view scene
             primaryStage.setScene(this.successView.getScene());
         });
         CheckBox showPastCheckBox = new CheckBox("Show past bookings");
         showPastCheckBox.setSelected(false); // Ensure checkbox is initially unchecked
+
+        checkPickUpAndDropOff.setOnAction(e -> {
+            // Get the selected booking
+            String selectedBooking = bookingsListView.getSelectionModel().getSelectedItem();
+            if (selectedBooking != null) {
+                int bookingID = extractBookingID(selectedBooking); // Implement a method to extract booking ID from
+                                                                   // the string
+                try {
+                    // Get the pick-up and drop-off locations associated with the selected booking
+                    DropOff dropOff = dropOffModel.getDropOffByBookingID(bookingID);
+                    PickUp pickUp = pickUpModel.getPickUpByBookingID(bookingID);
+
+                    // Show the pick-up and drop-off locations in a popup window
+                    showPickUpAndDropOffInfo(dropOff, pickUp);
+
+                } catch (DLException ex) {
+                    // Handle exception
+                    ex.printStackTrace();
+                }
+            } else {
+                // No booking is selected, display a message
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle("Warning");
+                alert.setHeaderText(null);
+                alert.setContentText("Please select a booking to view pick-up and drop-off locations.");
+                alert.showAndWait();
+            }
+        });
 
         // Define methods to load past and current bookings
         Runnable loadPastBookings = () -> {
@@ -416,6 +454,7 @@ public class Controller implements EventHandler<ActionEvent> {
 
                     // Show the insurance and payment information in a popup window
                     showInsuranceAndPaymentInfo(insurance, payment);
+
                 } catch (DLException e) {
                     // Handle exception
                     e.printStackTrace();
@@ -446,6 +485,7 @@ public class Controller implements EventHandler<ActionEvent> {
         modifyBooking.setOnAction(event -> modifyBooking());
         damageReport.setOnAction(event -> reportDamage());
         vbox.getChildren().addAll(bookingsListView, backButton, removeBooking, modifyBooking, checkPaymentAndInsurance,
+                checkPickUpAndDropOff,
                 showPastCheckBox, damageReport);
 
         // Initially load current bookings
@@ -453,6 +493,27 @@ public class Controller implements EventHandler<ActionEvent> {
         Scene bookingsScene = new Scene(vbox, 400, 300);
         primaryStage.setScene(bookingsScene);
     }
+
+    public void showPickUpAndDropOffInfo(DropOff dropOff, PickUp pickUp) {
+        Stage infoStage = new Stage();
+        infoStage.initModality(Modality.APPLICATION_MODAL);
+        infoStage.setTitle("Pick-Up and Drop-Off Information");
+    
+        Label dropOffLabel = new Label("Drop-Off Location:");
+        Label dropOffInfoLabel = new Label(dropOff != null ? dropOff.getAddress() + ", " + dropOff.getCity() + ", " + dropOff.getPostalCode() + ", " + dropOff.getTime() : "Not Available");
+    
+        Label pickUpLabel = new Label("Pick-Up Location:");
+        Label pickUpInfoLabel = new Label(pickUp != null ? pickUp.getAddress() + ", " + pickUp.getCity() + ", " + pickUp.getPostalCode() + ", " + pickUp.getTime() : "Not Available");
+    
+        VBox layout = new VBox(10);
+        layout.getChildren().addAll(dropOffLabel, dropOffInfoLabel, pickUpLabel, pickUpInfoLabel);
+    
+        Scene scene = new Scene(layout, 400, 200);
+        infoStage.setScene(scene);
+    
+        infoStage.showAndWait();
+    }
+    
 
     private void showInsuranceAndPaymentInfo(Insurance insurance, Payment payment) {
         // Create a new Stage for the popup window
@@ -545,7 +606,7 @@ public class Controller implements EventHandler<ActionEvent> {
                     // No transaction commit here; it will be committed after payment processing
                     bookingStage.close(); // Close the booking popup stage
 
-                    // Display payment popup after booking
+                    selectLocationsPopup(selectedCar, database, booking.getBookingID());
                     displayPaymentPopup(selectedCar, database); // Pass database connection for the same transaction
 
                 } catch (DLException e) {
@@ -885,9 +946,7 @@ public class Controller implements EventHandler<ActionEvent> {
             alert.showAndWait();
         }
     }
-    
 
-    
     private int extractBookingID(String bookingString) {
         String[] parts = bookingString.split(":");
         String[] bookID = parts[1].split(",");
@@ -937,6 +996,89 @@ public class Controller implements EventHandler<ActionEvent> {
             }
             e.printStackTrace();
         }
+    }
+
+    private void selectLocationsPopup(Car selectedCar, MySQLDatabase database, int bookingID) {
+        Stage locationStage = new Stage();
+        locationStage.initModality(Modality.APPLICATION_MODAL);
+        locationStage.setTitle("Select Drop-off and Pick-up Locations");
+
+        Label dropOffLabel = new Label("Drop-off Address:");
+        TextField dropOffAddressField = new TextField();
+
+        Label dropOffCityLabel = new Label("Drop-off City:");
+        ComboBox<String> dropOffCityComboBox = new ComboBox<>();
+        dropOffCityComboBox.getItems().addAll("Zagreb", "Split", "Rijeka", "Osijek", "Zadar", "Pula", "Šibenik",
+                "Dubrovnik", "Slavonski Brod", "Karlovac");
+
+        Label dropOffPostalCodeLabel = new Label("Drop-off Postal Code:");
+        TextField dropOffPostalCodeField = new TextField();
+
+        Label dropOffDateLabel = new Label("Drop-off Date:");
+        DatePicker dropOffDatePicker = new DatePicker();
+
+        Label pickUpLabel = new Label("Pick-up Address:");
+        TextField pickUpAddressField = new TextField();
+
+        Label pickUpCityLabel = new Label("Pick-up City:");
+        ComboBox<String> pickUpCityComboBox = new ComboBox<>();
+        pickUpCityComboBox.getItems().addAll("Zagreb", "Split", "Rijeka", "Osijek", "Zadar", "Pula", "Šibenik",
+                "Dubrovnik", "Slavonski Brod", "Karlovac");
+
+        Label pickUpPostalCodeLabel = new Label("Pick-up Postal Code:");
+        TextField pickUpPostalCodeField = new TextField();
+
+        Label pickUpDateLabel = new Label("Pick-up Date:");
+        DatePicker pickUpDatePicker = new DatePicker();
+
+        Button confirmButton = new Button("Confirm");
+        confirmButton.setOnAction(e -> {
+            String dropOffAddress = dropOffAddressField.getText();
+            String dropOffCity = dropOffCityComboBox.getValue();
+            String dropOffPostalCode = dropOffPostalCodeField.getText();
+            LocalDate dropOffDate = dropOffDatePicker.getValue();
+
+            String pickUpAddress = pickUpAddressField.getText();
+            String pickUpCity = pickUpCityComboBox.getValue();
+            String pickUpPostalCode = pickUpPostalCodeField.getText();
+            LocalDate pickUpDate = pickUpDatePicker.getValue();
+
+            Timestamp dropOffTimestamp = Timestamp.valueOf(dropOffDate.atStartOfDay());
+            Timestamp pickUpTimestamp = Timestamp.valueOf(pickUpDate.atStartOfDay());
+
+            DropOff dropOff = new DropOff(dropOffAddress, dropOffCity, dropOffPostalCode, dropOffTimestamp,
+                    bookingID);
+            PickUp pickUp = new PickUp(pickUpAddress, pickUpCity, pickUpPostalCode, pickUpTimestamp,
+                    bookingID);
+
+            try {
+                database.startTrans();
+                dropOffModel.setData(dropOff);
+                pickUpModel.setData(pickUp);
+                database.endTrans();
+            } catch (DLException ex) {
+                try {
+                    database.rollbackTrans();
+                } catch (DLException rollbackEx) {
+                    rollbackEx.printStackTrace();
+                }
+                ex.printStackTrace();
+            }
+
+            locationStage.close();
+        });
+
+        VBox layout = new VBox(10);
+        layout.getChildren().addAll(dropOffLabel, dropOffAddressField, dropOffCityLabel, dropOffCityComboBox,
+                dropOffPostalCodeLabel, dropOffPostalCodeField, dropOffDateLabel, dropOffDatePicker,
+                pickUpLabel, pickUpAddressField, pickUpCityLabel, pickUpCityComboBox,
+                pickUpPostalCodeLabel, pickUpPostalCodeField, pickUpDateLabel, pickUpDatePicker, confirmButton);
+        layout.setAlignment(Pos.CENTER);
+
+        Scene scene = new Scene(layout, 400, 400);
+        locationStage.setScene(scene);
+
+        locationStage.showAndWait();
     }
 
     private void displayPaymentPopup(Car selectedCar, MySQLDatabase database) {
@@ -1011,7 +1153,6 @@ public class Controller implements EventHandler<ActionEvent> {
                     e1.printStackTrace();
                 }
                 processInsuranceSelection(selectedCar, insuranceType, database);
-                // processCashPayment(selectedCar, database);
 
             } else if (toggleGroup.getSelectedToggle() == cardRadioButton) {
                 paymentMethod = "Card";
@@ -1028,7 +1169,6 @@ public class Controller implements EventHandler<ActionEvent> {
                         e1.printStackTrace();
                     }
                     processInsuranceSelection(selectedCar, insuranceType, database);
-                    // processCardPayment(selectedCar, cardNumber, cardType, database);
                 } else {
                     Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                     errorAlert.setTitle("Invalid Card Number");
@@ -1073,8 +1213,6 @@ public class Controller implements EventHandler<ActionEvent> {
         this.bookingsListView = bookingsListView;
     }
 
-
-
     public void reportDamage() {
         String selectedBookingString = this.bookingsListView.getSelectionModel().getSelectedItem();
         if (selectedBookingString != null) {
@@ -1082,18 +1220,19 @@ public class Controller implements EventHandler<ActionEvent> {
             Car car = getCarByBookingID(bookingID);
             Stage popupStage = new Stage();
             popupStage.setTitle("Report Damage");
-    
+
             Label carIdLabel = new Label("Car ID: " + car.getCarID());
             TextArea damageDescriptionTextArea = new TextArea();
             damageDescriptionTextArea.setPromptText("Enter damage description here...");
-    
+
             Button submitButton = new Button("Submit");
             submitButton.setOnAction(event -> {
                 String damageDescription = damageDescriptionTextArea.getText();
                 if (!damageDescription.isEmpty()) {
                     try {
-                       
-                        Report report = new Report(car.getCarID(), new Timestamp(System.currentTimeMillis()), damageDescription);
+
+                        Report report = new Report(car.getCarID(), new Timestamp(System.currentTimeMillis()),
+                                damageDescription);
                         boolean success = reportModel.setData(report);
                         if (success) {
                             Alert successAlert = new Alert(AlertType.INFORMATION);
@@ -1110,7 +1249,7 @@ public class Controller implements EventHandler<ActionEvent> {
                         }
                     } catch (DLException e) {
                         e.printStackTrace();
-    
+
                         Alert errorAlert = new Alert(AlertType.ERROR);
                         errorAlert.setTitle("Reporting Damage Error");
                         errorAlert.setHeaderText(null);
@@ -1126,14 +1265,14 @@ public class Controller implements EventHandler<ActionEvent> {
                     alert.showAndWait();
                 }
             });
-    
+
             VBox vbox = new VBox(carIdLabel, damageDescriptionTextArea, submitButton);
             vbox.setSpacing(10);
-    
+
             Scene scene = new Scene(vbox, 300, 200);
-    
+
             popupStage.setScene(scene);
-    
+
             popupStage.show();
         } else {
             Alert alert = new Alert(AlertType.ERROR);
@@ -1143,6 +1282,5 @@ public class Controller implements EventHandler<ActionEvent> {
             alert.showAndWait();
         }
     }
-    
 
 }

@@ -1,11 +1,13 @@
 import Controller.Controller;
 import Models.Bookings;
 import Models.Cars;
+import Models.DropOffs;
 import Models.Feedbacks;
 import Models.Insurances;
 import Models.Maintenances;
 import Models.Model;
 import Models.Payments;
+import Models.PickUps;
 import Models.Users;
 import Models.Reports;
 import View.View;
@@ -28,10 +30,12 @@ public class ApplicationRunner extends Application {
         Payments paymentModel = new Payments();
         Feedbacks feedbackModel = new Feedbacks();
         Maintenances maintenances = new Maintenances();
-        Reports reports =new Reports();
+        Reports reports = new Reports();
+        DropOffs dropOffs = new DropOffs();
+        PickUps pickUps = new PickUps();
 
         Controller controller = new Controller(view, cars, bookingModel, userModel, insuranceModel, paymentModel,
-                feedbackModel, maintenances,reports,
+                feedbackModel, maintenances, reports, pickUps, dropOffs,
                 view.getPrimaryStage());
     }
 

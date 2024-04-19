@@ -78,8 +78,7 @@ CREATE TABLE Payment(
 DROP TABLE IF EXISTS Pickup_location;
 DROP TABLE IF EXISTS Pickup_location;
 CREATE TABLE Pickup_location(
-    bookingID INT PRIMARY KEY,  
-    FOREIGN KEY(bookingID) REFERENCES Booking(bookingID) ON DELETE CASCADE,  -- Add ON DELETE CASCADE here
+    bookingID INT AUTO_INCREMENT PRIMARY KEY,  
     address VARCHAR(30),
     city VARCHAR(30),
     postal_Code VARCHAR(10),
@@ -89,8 +88,7 @@ CREATE TABLE Pickup_location(
 
 DROP TABLE IF EXISTS Dropoff_location;
 CREATE TABLE Dropoff_location(
-    bookingID INT PRIMARY KEY, 
-    FOREIGN KEY(bookingID) REFERENCES Booking(bookingID) ON DELETE CASCADE,
+    bookingID INT AUTO_INCREMENT PRIMARY KEY, 
     address VARCHAR(30),
     city VARCHAR(30),
     postal_Code VARCHAR(10),
@@ -173,18 +171,10 @@ VALUES
    ('Rolls-Royce', 'Ghost', 563, 2021, 9000, TRUE, 1200.00),
    ('Maserati', 'GranTurismo', 454, 2020, 15000, TRUE, 600.00);
 
-INSERT INTO Booking (userID, carID, timestamp)
-VALUES
-    (1, 1, NOW()),
-    (2, 2, NOW());
 INSERT INTO Payment (userID, carID, amount, method, card_details, card_type, timestamp)
 VALUES
     (1, 1, 50.00, 'Card', 1234567812345678, 'Visa', NOW()),
     (2, 2, 40.00, 'Cash', NULL, NULL, NOW());
-INSERT INTO Pickup_location (bookingID, address, city, postal_Code, time)
-VALUES
-    (1, '123 Main St', 'Cityville', '12345', NOW()),
-    (2, '456 Elm St', 'Townsville', '67890', NOW());
 INSERT INTO Feedback (carID, userID, feedback_message, rating, timestamp)
 VALUES
     (1, 1, 'Great car, smooth ride!', 5, NOW()),
