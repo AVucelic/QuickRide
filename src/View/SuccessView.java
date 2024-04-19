@@ -36,6 +36,7 @@ public class SuccessView extends Application {
     private Button bookingBtn = new Button("Bookings");
     private Button bookACar = new Button("Book a car");
     private Button feedback = new Button("Leave Feedback");
+    private Button support = new Button("Customer Support");
 
     public void HandleFeedback(EventHandler<ActionEvent> event) {
         feedback.setOnAction(event);
@@ -68,6 +69,7 @@ public class SuccessView extends Application {
         primaryStage.setScene(scene);
 
         primaryStage.show();
+        support.setOnAction(event -> openCustomerSupportWindow());
     }
 
     public AnchorPane createContent() {
@@ -147,7 +149,17 @@ public class SuccessView extends Application {
         feedback.setLayoutX(600);
         feedback.setLayoutY(700);
         root.getChildren().add(feedback);
+
+        support.setLayoutX(600);
+        support.setLayoutY(650);
+        root.getChildren().add(support);
         return root;
+    }
+
+    private void openCustomerSupportWindow() {
+        Stage supportStage = new Stage();
+        CustomerView customerView = new CustomerView();
+        customerView.start(supportStage);
     }
 
     public Button getFirstPageButton() {
@@ -252,6 +264,14 @@ public class SuccessView extends Application {
 
     public void setFeedback(Button feedback) {
         this.feedback = feedback;
+    }
+
+    public Button getSupport() {
+        return support;
+    }
+
+    public void setSupport(Button support) {
+        this.support = support;
     }
 
     public void setScene(Scene scene) {
