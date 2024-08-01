@@ -8,8 +8,6 @@ QuickRide is a desktop application developed in Java and JavaFX, with MySQL as t
 - [Installation](#installation)
 - [Usage](#usage)
 - [Database Configuration](#database-configuration)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Features
 - User authentication (registration and login)
@@ -62,3 +60,5 @@ Ensure your `db.properties` file is correctly set up with the following properti
 db.url=jdbc:mysql://localhost:3306/quickride
 db.username=your-username
 db.password=your-password
+Replace your-username and your-password with your actual MySQL credentials.
+
